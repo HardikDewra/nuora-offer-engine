@@ -1,0 +1,13 @@
+{
+  "name": "nuora-offer-scorer-api",
+  "version": "1.0.0",
+  "description": "REST API for Nuora offer scoring - score offer configurations against historical A/B test data",
+  "main": "offer_api.js",
+  "scripts": {
+    "start": "node offer_api.js",
+    "dev": "node --watch offer_api.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}

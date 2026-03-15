@@ -139,6 +139,50 @@ Open `dashboard/index.html` in a browser for an interactive visual dashboard wit
 - Element impact matrix
 - Interactive offer configurator with live scoring
 
+**Live dashboard:** https://hardikdewra.github.io/nuora-offer-engine/dashboard/
+
+## Node.js Offer Scoring API
+
+For quick scoring without Python, use the Express API:
+
+```bash
+cd tools && npm install && node offer_api.js
+```
+
+Endpoints:
+- `POST /score` - Score a single offer configuration
+- `POST /compare` - Compare two offers side by side
+- `GET /control` - Get winning control config and score
+- `GET /tests` - List all historical test results
+- `GET /sweet-spots` - Pricing sweet spot analysis
+
+## CI/CD
+
+GitHub Actions automatically re-runs analysis and updates the report when new test data is pushed to `data/test_results/`.
+
+## Related Nuora Repositories
+
+| Repository | Description |
+|-----------|-------------|
+| [nuora-offer-engine](https://github.com/HardikDewra/nuora-offer-engine) | This repo - offer optimization engine |
+| [nuora-subscription-analysis](https://github.com/HardikDewra/nuora-subscription-analysis) | Subscription revenue & retention analysis |
+| [Nuora-New-Offer-Testing](https://github.com/HardikDewra/Nuora-New-Offer-Testing) | Offer testing methodology and A/B test reports |
+| [Nuora-Cursor-Project](https://github.com/HardikDewra/Nuora-Cursor-Project) | Landing pages, listicles, and PDP builds |
+| [nuora-quiz-funnels](https://github.com/HardikDewra/nuora-quiz-funnels) | Quiz funnel implementation |
+
+## Design Preferences
+
+See `docs/brand_preferences.md` for Nikita's design guidelines:
+- Light mode only, no dark mode
+- Americana BT Bold headings, Montserrat body
+- 1px border-radius, no shadows, no glow
+- Frosty glass OK, liquid glass NOT OK
+- Brand colors: Yellow (gummies), Rose (gut ritual), Blue (medical)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new test data and use the tools.
+
 ---
 
 Built for Nuora CRO optimization. Data from Elevate A/B tests, Jan 2026.

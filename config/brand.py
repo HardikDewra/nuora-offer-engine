@@ -11,6 +11,19 @@ BRAND = {
     "business_model": "Subscription-first DTC",
 }
 
+# Design preferences (Nikita)
+DESIGN_PREFERENCES = {
+    "mode": "light_only",           # NO dark mode anywhere
+    "border_radius": "1px",         # Maximum 1px on all elements
+    "shadows": False,               # NO box-shadow, text-shadow, or glow
+    "glow_effects": False,          # No glow or radiance
+    "liquid_glass": False,          # Does NOT like iOS 26 liquid glass
+    "frosty_glass": True,           # Likes subtle frosted glass (backdrop-filter blur)
+    "heading_font": "Americana BT Bold",
+    "body_font": "Montserrat",
+    "design_tool": "Paper Design (MCP server)",
+}
+
 COLORS = {
     "yellow": {
         25: "#FEFDF0",
