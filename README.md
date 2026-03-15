@@ -4,12 +4,14 @@
 
 ⚫ **Repository:** https://github.com/HardikDewra/nuora-offer-engine
 
-A data-driven offer optimization system for Nuora's PDP (Product Detail Page). Analyzes historical A/B test data to identify winning patterns, predict new offer performance, find pricing sweet spots, and generate recommendations for the next round of tests.
+A living, ever-expanding offer optimization system for Nuora's PDP. Every A/B test we run from **March 15, 2026 onward** gets logged here. The more tests we add, the smarter the scoring model gets at predicting what will increase LTV, CVR, and AOV - recommendations based on data, not assumptions.
+
+This is not a one-time analysis. It's a compounding knowledge base that the entire CRO team contributes to and queries from.
 
 ## What This Does
 
-- **Analyzes 7 A/B tests** across 4 offer styles (Ankhway, Ryze, Omre, Resilia) with V1/V2 iterations
-- **Scores new offer configurations** against historical patterns to predict conversion rate and subscription capture
+- **Tracks every A/B test** we run - structured data, not scattered screenshots
+- **Scores new offer configurations** against all historical patterns to predict conversion rate and subscription capture
 - **Finds pricing sweet spots** based on how different price points correlate with conversion, AOV, and LTV
 - **Generates next-test recommendations** prioritized by expected impact and risk
 - **Calculates LTV projections** across subscription cadences (monthly, bimonthly, quarterly)
