@@ -1,6 +1,7 @@
 # Nuora Offer Intelligence Engine
 
 🔴 **Live Dashboard:** https://hardikdewra.github.io/nuora-offer-engine/dashboard/
+
 ⚫ **Repository:** https://github.com/HardikDewra/nuora-offer-engine
 
 A data-driven offer optimization system for Nuora's PDP (Product Detail Page). Analyzes historical A/B test data to identify winning patterns, predict new offer performance, find pricing sweet spots, and generate recommendations for the next round of tests.
