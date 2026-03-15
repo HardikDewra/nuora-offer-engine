@@ -1,0 +1,48 @@
+{
+  "product_name": "Nuora Vaginal Probiotic - 100% Real",
+  "handle": "feminine-balance-gummies-1",
+  "url": "https://mynuora.com/products/feminine-balance-gummies-1",
+  "type": "gummies",
+  "servings_per_pack": 30,
+  "gummies_per_pack": 60,
+  "flavor": "Pineapple",
+  "scraped_at": "2026-03-15",
+  "pricing": {
+    "one_time": {
+      "1_pack": {"price": 40.99, "compare_at": 57.99, "per_pack": 40.99, "per_day": 1.37, "per_serving": 1.37},
+      "2_pack": {"price": 57.99, "compare_at": 115.98, "per_pack": 29.00, "per_day": 0.97, "per_serving": 0.97},
+      "3_pack": {"price": 68.99, "compare_at": 173.97, "per_pack": 23.00, "per_day": 0.77, "per_serving": 0.77}
+    },
+    "subscription": {
+      "1_pack": {"price": 34.99, "frequency": "monthly", "per_pack": 34.99, "per_day": 1.17, "savings_vs_otp_dollar": 6.00, "savings_vs_otp_pct": 14.6},
+      "2_pack": {"price": 49.99, "frequency": "every 2 months", "per_pack": 25.00, "per_day": 0.83, "savings_vs_otp_dollar": 8.00, "savings_vs_otp_pct": 13.8},
+      "3_pack": {"price": 58.99, "frequency": "every 3 months", "per_pack": 19.66, "per_day": 0.66, "savings_vs_otp_dollar": 10.00, "savings_vs_otp_pct": 14.5}
+    }
+  },
+  "reviews": {
+    "count": 11847,
+    "average_rating": 4.57,
+    "platform": "Judge.me"
+  },
+  "shipping": {
+    "free_shipping": true,
+    "handling_days": "1-2",
+    "transit_days": "3-7",
+    "country": "US"
+  },
+  "inventory": {
+    "status": "in_stock",
+    "policy": "continue_selling"
+  },
+  "usp": "The Only Biofilm-Destroying Feminine Probiotic",
+  "key_claims": [
+    "6.4x more effective than probiotics alone",
+    "90% success rate in clinical trials",
+    "Results in 21 days or money back"
+  ],
+  "ingredients_highlight": [
+    "Bromelain (pineapple enzyme) - breaks biofilm shields",
+    "SNZ1969 probiotics - survive stomach acid",
+    "Vitamin C - pH optimization"
+  ]
+}

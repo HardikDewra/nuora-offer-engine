@@ -1,0 +1,76 @@
+{
+  "name": "Ankhway V1",
+  "style": "Ankhway",
+  "version": "V1",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-sale",
+  "inspiration": "https://ankhway.com/products/mushroom-gummies",
+  "test_date": "2026-01-17",
+  "duration_hours": 8,
+  "result": "control_wins",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "separate_card",
+    "otp_visibility": "separate_card",
+    "naming": "time_based",
+    "num_options": 2,
+    "pricing_display": "standard",
+    "savings_display": "percent",
+    "product_images": false,
+    "cta_copy": "buy_now",
+    "bundle_names": ["30-day supply", "90-day supply", "One time purchase"],
+    "badges": ["Most Popular - Save 20%", "Best Value! Buy 2 Get 1 Free!"],
+    "subscription_info_location": "inside_selected_card"
+  },
+  "pricing": {
+    "subscription": {
+      "30_day": {"price": 37.99, "compare": 47.49, "discount_pct": 20, "per_day": 1.27, "delivery": "monthly"},
+      "90_day": {"price": 75.99, "compare": 79.99, "per_pack": 25.33, "per_day": 0.84, "delivery": "quarterly"}
+    },
+    "one_time": {
+      "1_pack": {"price": 39.99, "per_pack": 39.99}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 788,
+      "revenue": 2941.07,
+      "revenue_per_visitor": 3.73,
+      "conversion_rate": 6.98,
+      "orders": 55,
+      "aov": 53.47,
+      "profit": 1870.07,
+      "profit_per_visitor": 2.37,
+      "shipping_revenue": 0.00,
+      "add_to_cart_rate": 15.1,
+      "reached_checkout_rate": 9.8,
+      "session_duration_sec": 41,
+      "otp_orders": 6,
+      "subscription_orders": 49,
+      "subscription_rate": 89.1
+    },
+    "variant": {
+      "visitors": 809,
+      "revenue": 2104.39,
+      "revenue_per_visitor": 2.60,
+      "conversion_rate": 4.82,
+      "orders": 39,
+      "aov": 53.96,
+      "profit": 1996.39,
+      "profit_per_visitor": 2.47,
+      "shipping_revenue": 113.85,
+      "add_to_cart_rate": 10.0,
+      "reached_checkout_rate": 7.5,
+      "session_duration_sec": 29,
+      "otp_orders": 15,
+      "subscription_orders": 24,
+      "subscription_rate": 61.5
+    }
+  },
+  "key_learnings": [
+    "Making OTP a visible separate card increased OTP orders (6 -> 15) and halved subscriptions (49 -> 24)",
+    "Vertical stacking creates more visual weight for OTP option",
+    "Conversion rate dropped -2.16% - among worst performing variants",
+    "Having OTP as a visible third card makes it a 'safer' choice for commitment-averse customers",
+    "Buy 2 Get 1 Free messaging didn't drive enough subscription value"
+  ]
+}

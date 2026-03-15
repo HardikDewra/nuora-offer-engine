@@ -1,0 +1,75 @@
+{
+  "name": "Ryze V1",
+  "style": "Ryze",
+  "version": "V1",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-deal",
+  "inspiration": "https://www.ryzesuperfoods.com/em-cgi/btag/products/mushroom-coffee",
+  "test_date": "2026-01-21",
+  "duration_hours": 12,
+  "result": "control_wins",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "none",
+    "otp_visibility": "not_available",
+    "naming": "creative",
+    "num_options": 3,
+    "pricing_display": "standard",
+    "savings_display": "dollar",
+    "product_images": false,
+    "cta_copy": "get_started",
+    "bundle_names": ["Single Pack", "Starter Kit", "Ritual Set"],
+    "badges": ["BEST DEAL"],
+    "urgency": "countdown_in_offer_module",
+    "subscription_info_location": "below_cta_bullets"
+  },
+  "pricing": {
+    "subscription": {
+      "single_pack": {"price": 34.19, "compare": 63.30, "discount_pct": 46, "per_serving": 1.14, "refill_price": 30.77, "refill_days": 30},
+      "starter_kit": {"price": 44.99, "compare": 80.34, "discount_pct": 44, "per_serving": 0.75, "refill_price": 40.49, "refill_days": 60},
+      "ritual_set": {"price": 53.09, "compare": 100.17, "discount_pct": 47, "per_serving": 0.59, "refill_price": 47.78, "refill_days": 90}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 1296,
+      "revenue": 5609.88,
+      "revenue_per_visitor": 4.33,
+      "conversion_rate": 7.72,
+      "orders": 100,
+      "aov": 56.10,
+      "profit": 3404.98,
+      "profit_per_visitor": 2.63,
+      "shipping_revenue": 4.95,
+      "add_to_cart_rate": 14.2,
+      "reached_checkout_rate": 9.3,
+      "session_duration_sec": 44,
+      "otp_orders": 21,
+      "subscription_orders": 79,
+      "subscription_rate": 79.0
+    },
+    "variant": {
+      "visitors": 1341,
+      "revenue": 4229.43,
+      "revenue_per_visitor": 3.15,
+      "conversion_rate": 6.04,
+      "orders": 82,
+      "aov": 51.58,
+      "profit": 4031.43,
+      "profit_per_visitor": 3.01,
+      "shipping_revenue": 138.60,
+      "add_to_cart_rate": 9.0,
+      "reached_checkout_rate": 5.7,
+      "session_duration_sec": 33,
+      "otp_orders": 1,
+      "subscription_orders": 81,
+      "subscription_rate": 98.8
+    }
+  },
+  "key_learnings": [
+    "Removing OTP almost eliminated one-time purchases (21 -> 1)",
+    "Subscription orders remained similar (79 vs 81) despite lower overall conversion",
+    "Forced subscription may deter some buyers who would otherwise purchase",
+    "Higher profit per visitor despite lower revenue",
+    "Session duration reduced -28.8% - users decide faster but don't convert better"
+  ]
+}

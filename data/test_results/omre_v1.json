@@ -1,0 +1,78 @@
+{
+  "name": "Omre V1",
+  "style": "Omre",
+  "version": "V1",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-package",
+  "inspiration": "https://omre.co/products/nmn-resveratrol",
+  "test_date": "2026-01-21",
+  "duration_hours": 13,
+  "result": "control_wins",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "side_by_side",
+    "otp_visibility": "equal_weight",
+    "naming": "time_based",
+    "num_options": 2,
+    "pricing_display": "standard",
+    "savings_display": "percent",
+    "product_images": false,
+    "cta_copy": "get_started",
+    "bundle_names": ["1-month supply", "3-month supply"],
+    "badges": ["Most popular"],
+    "dynamic_pricing": true,
+    "subscription_info_location": "inside_selected_card"
+  },
+  "pricing": {
+    "subscription": {
+      "1_month": {"price": 39.99, "compare": 52.30, "discount_pct": 30, "per_day": 1.33, "frequency": "every_month"},
+      "3_month": {"price": 79.99, "compare": 139.45, "discount_pct": 40, "per_pack": 26.66, "per_day": 0.89, "frequency": "every_3_months"}
+    },
+    "one_time": {
+      "1_month": {"price": 39.99, "compare": 55.20, "discount_pct": 30, "per_day": 1.33},
+      "3_month": {"price": 119.97, "compare": 165.60, "discount_pct": 40, "per_day": 1.33}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 1429,
+      "revenue": 6173.05,
+      "revenue_per_visitor": 4.32,
+      "conversion_rate": 7.91,
+      "orders": 113,
+      "aov": 54.63,
+      "profit": 3833.05,
+      "profit_per_visitor": 2.68,
+      "shipping_revenue": 9.90,
+      "add_to_cart_rate": 15.9,
+      "reached_checkout_rate": 9.2,
+      "session_duration_sec": 47,
+      "otp_orders": 23,
+      "subscription_orders": 90,
+      "subscription_rate": 79.6
+    },
+    "variant": {
+      "visitors": 1498,
+      "revenue": 5122.25,
+      "revenue_per_visitor": 3.42,
+      "conversion_rate": 5.41,
+      "orders": 81,
+      "aov": 63.24,
+      "profit": 4834.25,
+      "profit_per_visitor": 3.23,
+      "shipping_revenue": 207.90,
+      "add_to_cart_rate": 7.0,
+      "reached_checkout_rate": 5.4,
+      "session_duration_sec": 33,
+      "otp_orders": 37,
+      "subscription_orders": 44,
+      "subscription_rate": 54.3
+    }
+  },
+  "key_learnings": [
+    "Side-by-side Sub/OTP toggle with equal visual weight destroys subscription rate (79.6% -> 54.3%)",
+    "OTP orders nearly doubled (23 -> 37) while subscriptions halved (90 -> 44)",
+    "Higher AOV ($63.24 vs $54.63) suggests larger bundles purchased, but as OTP",
+    "Conversion rate dropped -2.50% - worst relative drop",
+    "Dynamic pricing showing OTP clearly made customers choose the 'safer' one-time option"
+  ]
+}

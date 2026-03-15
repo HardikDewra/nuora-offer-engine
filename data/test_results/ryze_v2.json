@@ -1,0 +1,85 @@
+{
+  "name": "Ryze V2",
+  "style": "Ryze",
+  "version": "V2",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-deal",
+  "inspiration": "https://www.ryzesuperfoods.com/em-cgi/btag/products/mushroom-coffee",
+  "test_date": "2026-01-30",
+  "duration_hours": 14,
+  "result": "control_wins",
+  "probability_to_win": 2.25,
+  "changes_from_v1": "Added product images to bundle cards",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "none",
+    "otp_visibility": "not_available",
+    "naming": "creative",
+    "num_options": 3,
+    "pricing_display": "standard",
+    "savings_display": "dollar",
+    "product_images": true,
+    "cta_copy": "get_started",
+    "bundle_names": ["Single Pack", "Starter Kit", "Ritual Set"],
+    "badges": ["BEST DEAL"],
+    "urgency": "countdown_in_offer_module",
+    "subscription_info_location": "below_cta_bullets"
+  },
+  "pricing": {
+    "subscription": {
+      "single_pack": {"price": 34.19, "compare": 63.30, "discount_pct": 46, "per_serving": 1.14, "refill_price": 30.77, "refill_days": 30},
+      "starter_kit": {"price": 44.99, "compare": 80.34, "discount_pct": 44, "per_serving": 0.75, "refill_price": 40.49, "refill_days": 60},
+      "ritual_set": {"price": 53.09, "compare": 100.17, "discount_pct": 47, "per_serving": 0.59, "refill_price": 47.78, "refill_days": 90}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 712,
+      "revenue": 3201.68,
+      "revenue_per_visitor": 4.50,
+      "conversion_rate": 8.99,
+      "orders": 64,
+      "aov": 50.03,
+      "profit": 2058.68,
+      "profit_per_visitor": 2.89,
+      "shipping_revenue": 0.00,
+      "add_to_cart_rate": 15.0,
+      "reached_checkout_rate": 10.8,
+      "session_duration_sec": 46,
+      "otp_orders": 14,
+      "subscription_orders": 50,
+      "subscription_rate": 78.1
+    },
+    "variant": {
+      "visitors": 715,
+      "revenue": 2162.68,
+      "revenue_per_visitor": 3.02,
+      "conversion_rate": 6.15,
+      "orders": 44,
+      "aov": 49.15,
+      "profit": 2081.68,
+      "profit_per_visitor": 2.91,
+      "shipping_revenue": 79.20,
+      "add_to_cart_rate": 11.1,
+      "reached_checkout_rate": 7.5,
+      "session_duration_sec": 34,
+      "otp_orders": 0,
+      "subscription_orders": 44,
+      "subscription_rate": 100.0
+    }
+  },
+  "v1_comparison": {
+    "v1_conv_rate": 6.04,
+    "v2_conv_rate": 6.15,
+    "improvement": 0.11,
+    "v1_sub_rate": 98.8,
+    "v2_sub_rate": 100.0,
+    "sub_improvement": 1.2
+  },
+  "key_learnings": [
+    "Adding product images did NOT improve conversion - V2 nearly identical to V1",
+    "Subscription-only model continues to eliminate OTP completely (14 -> 0)",
+    "Despite 100% subscription rate, overall orders dropped (64 -> 44)",
+    "97.75% probability that control wins - clearly not viable",
+    "The problem is the subscription-only model, not the visual design"
+  ]
+}

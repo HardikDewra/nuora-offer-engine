@@ -1,0 +1,88 @@
+{
+  "name": "Ankhway V2",
+  "style": "Ankhway",
+  "version": "V2",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-sale",
+  "inspiration": "https://ankhway.com/products/mushroom-gummies",
+  "test_date": "2026-01-30",
+  "duration_hours": 30,
+  "result": "control_wins",
+  "probability_to_win": 5.49,
+  "changes_from_v1": "Simplified rounded pricing + Buy 2 Get 1 Free messaging on 90-day supply",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "separate_card",
+    "otp_visibility": "separate_card",
+    "naming": "time_based",
+    "num_options": 2,
+    "pricing_display": "rounded",
+    "savings_display": "percent",
+    "product_images": false,
+    "cta_copy": "buy_now",
+    "bundle_names": ["30-day supply", "90-day supply", "One time purchase"],
+    "badges": ["Most Popular - Save 20%", "Best Value! Buy 2 Get 1 Free!"],
+    "dynamic_cta": true,
+    "subscription_info_location": "inside_selected_card"
+  },
+  "pricing": {
+    "subscription": {
+      "30_day": {"price": 40.00, "compare": 50.00, "per_day": 1.27, "delivery": "monthly"},
+      "90_day": {"price": 99.99, "compare": 150.00, "per_pack": 33.33, "per_day": 0.84, "delivery": "quarterly"}
+    },
+    "one_time": {
+      "1_pack": {"price": 50.00, "per_pack": 50.00}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 2091,
+      "revenue": 10726.85,
+      "revenue_per_visitor": 5.13,
+      "conversion_rate": 8.23,
+      "orders": 193,
+      "aov": 55.58,
+      "profit": 6667.85,
+      "profit_per_visitor": 3.19,
+      "shipping_revenue": 0.00,
+      "add_to_cart_rate": 17.3,
+      "reached_checkout_rate": 10.3,
+      "session_duration_sec": 50,
+      "otp_orders": 40,
+      "subscription_orders": 153,
+      "subscription_rate": 79.3
+    },
+    "variant": {
+      "visitors": 2052,
+      "revenue": 8880.20,
+      "revenue_per_visitor": 4.33,
+      "conversion_rate": 7.16,
+      "orders": 147,
+      "aov": 60.00,
+      "profit": 8007.20,
+      "profit_per_visitor": 3.90,
+      "shipping_revenue": 301.95,
+      "add_to_cart_rate": 11.8,
+      "reached_checkout_rate": 9.2,
+      "session_duration_sec": 34,
+      "otp_orders": 29,
+      "subscription_orders": 119,
+      "subscription_rate": 80.4
+    }
+  },
+  "v1_comparison": {
+    "v1_conv_rate": 4.82,
+    "v2_conv_rate": 7.16,
+    "improvement": 2.34,
+    "v1_sub_rate": 61.5,
+    "v2_sub_rate": 80.4,
+    "sub_improvement": 18.9
+  },
+  "key_learnings": [
+    "V2 significantly outperformed V1 - conversion jumped from 4.82% to 7.16%",
+    "Buy 2 Get 1 Free messaging improved subscription ratio (62% -> 80%)",
+    "Rounded pricing appears to perform better than $X.99 pricing",
+    "Still underperforms control - OTP as visible card remains problematic",
+    "Closest any variant has gotten to control performance (1.07% gap)",
+    "Session duration dropped 32% - consistent with other vertical layouts"
+  ]
+}

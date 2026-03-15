@@ -1,0 +1,53 @@
+{
+  "name": "Control - Highest Converting PDP",
+  "url": "https://mynuora.com/products/feminine-balance-gummies-1",
+  "product": "Nuora Vaginal Probiotic Gummies (60 gummies / 30 servings)",
+  "status": "active_winner",
+  "design": {
+    "layout": "horizontal",
+    "toggle_type": "checkbox",
+    "otp_visibility": "behind_toggle",
+    "naming": "pack_based",
+    "num_options": 3,
+    "pricing_display": "standard",
+    "savings_display": "none",
+    "product_images": false,
+    "cta_copy": "add_to_cart",
+    "section_header": "FINAL SUPERSAVINGS",
+    "default_selection": "3_pack_subscription",
+    "subscription_module": {
+      "style": "dashed_border_checkbox",
+      "when_on": "orange_fill_cream_bg",
+      "when_off": "empty_circle_white_bg",
+      "copy": "Save More With Automatic Refills",
+      "sub_copy": "Zero Commitment | Cancel Anytime"
+    }
+  },
+  "pricing": {
+    "one_time": {
+      "1_pack": {"price": 40.99, "compare": 57.99, "per_pack": 40.99},
+      "2_pack": {"price": 57.99, "compare": 115.98, "per_pack": 29.00},
+      "3_pack": {"price": 68.99, "compare": 173.97, "per_pack": 23.00}
+    },
+    "subscription": {
+      "1_pack": {"price": 34.99, "per_pack": 34.99, "savings_vs_otp": 6.00},
+      "2_pack": {"price": 49.99, "per_pack": 25.00, "savings_vs_otp": 8.00},
+      "3_pack": {"price": 58.99, "per_pack": 19.66, "savings_vs_otp": 10.00}
+    }
+  },
+  "shipping": {
+    "free_shipping_threshold": "2+ packs"
+  },
+  "avg_performance": {
+    "conversion_rate": 7.65,
+    "subscription_rate": 83,
+    "aov": 53.38,
+    "revenue_per_visitor": 4.02,
+    "add_to_cart_rate": 15.0,
+    "session_duration_sec": 43
+  },
+  "performance_range": {
+    "conversion_rate": {"min": 5.94, "max": 8.99},
+    "subscription_rate": {"min": 77, "max": 89}
+  }
+}

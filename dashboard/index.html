@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuora Offer Intelligence Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --yellow-25: #FEFDF0;
+    --yellow-50: #FEFBE8;
+    --yellow-100: #FEF7C3;
+    --yellow-200: #FDE272;
+    --yellow-400: #FAC515;
+    --yellow-500: #EAAA08;
+    --yellow-600: #CA8504;
+    --brown-800: #854A0E;
+    --brown-900: #713B12;
+    --brown-950: #542C0D;
+    --positive: #276536;
+    --positive-bg: #d4edda;
+    --negative: #9B083E;
+    --negative-bg: #fce4ec;
+    --neutral: #854A0E;
+    --white: #ffffff;
+    --border: #e8dde0;
+    --font: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--yellow-25);
+    color: var(--brown-900);
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: var(--brown-950);
+    padding: 32px 24px;
+    text-align: center;
+  }
+  .header h1 {
+    color: var(--yellow-400);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .header p {
+    color: #c9a96e;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .header .version {
+    color: #8a6d3b;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Nav Tabs */
+  .nav-tabs {
+    display: flex;
+    background: var(--brown-950);
+    padding: 0 24px;
+    gap: 4px;
+    border-bottom: 2px solid var(--yellow-600);
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 12px 20px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    color: #8a6d3b;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--yellow-400); }
+  .nav-tab.active {
+    color: var(--yellow-400);
+    border-bottom-color: var(--yellow-400);
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  /* Tab Content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brown-800);
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--brown-950);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 12px;
+    color: var(--brown-800);
+    font-weight: 500;
+  }
+  .kpi-card.highlight {
+    border-color: var(--yellow-400);
+    background: var(--yellow-50);
+  }
+
+  /* Section */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brown-950);
+    margin-bottom: 4px;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--brown-800);
+    margin-bottom: 20px;
+  }
+
+  /* Charts */
+  .chart-container {
+    position: relative;
+    width: 100%;
+    max-height: 400px;
+  }
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .chart-row { grid-template-columns: 1fr; }
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--brown-950);
+    font-weight: 700;
+    color: var(--brown-950);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--brown-900);
+  }
+  .data-table tr:hover td { background: var(--yellow-50); }
+  .data-table .positive { color: var(--positive); font-weight: 600; }
+  .data-table .negative { color: var(--negative); font-weight: 600; }
+  .data-table .winner-row td { background: var(--positive-bg); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tag-win { background: var(--positive-bg); color: var(--positive); }
+  .tag-lose { background: var(--negative-bg); color: var(--negative); }
+  .tag-neutral { background: var(--yellow-100); color: var(--brown-800); }
+  .tag-v1 { background: #e3f2fd; color: #1565c0; }
+  .tag-v2 { background: #f3e5f5; color: #7b1fa2; }
+
+  /* Impact Matrix */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .impact-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 120px 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--yellow-50);
+    border-radius: 8px;
+    border-left: 4px solid var(--border);
+  }
+  .impact-row.positive-impact { border-left-color: var(--positive); }
+  .impact-row.negative-impact { border-left-color: var(--negative); }
+  .impact-row.neutral-impact { border-left-color: var(--yellow-400); }
+  .impact-element {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--brown-950);
+  }
+  .impact-desc {
+    font-size: 12px;
+    color: var(--brown-800);
+  }
+  .impact-conv, .impact-sub {
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .impact-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+    .impact-conv, .impact-sub { text-align: left; }
+  }
+
+  /* Configurator */
+  .config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .config-grid { grid-template-columns: 1fr; }
+  }
+  .config-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brown-950);
+    margin-bottom: 6px;
+  }
+  .form-group select, .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--brown-900);
+    background: var(--white);
+    appearance: auto;
+  }
+  .form-group select:focus, .form-group input:focus {
+    outline: none;
+    border-color: var(--yellow-400);
+  }
+
+  /* Score Display */
+  .score-panel {
+    background: var(--brown-950);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+  }
+  .score-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8a6d3b;
+    margin-bottom: 8px;
+  }
+  .score-value {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--yellow-400);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-unit {
+    font-size: 14px;
+    color: #c9a96e;
+    margin-bottom: 20px;
+  }
+  .score-breakdown {
+    text-align: left;
+    margin-top: 20px;
+  }
+  .score-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(202, 133, 4, 0.2);
+    font-size: 13px;
+  }
+  .score-item-label { color: #c9a96e; }
+  .score-item-value { font-weight: 700; }
+  .score-item-value.pos { color: #4caf50; }
+  .score-item-value.neg { color: #ef5350; }
+  .score-item-value.neutral-val { color: var(--yellow-400); }
+
+  .risk-meter {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .risk-low { background: rgba(39, 101, 54, 0.2); }
+  .risk-medium { background: rgba(202, 133, 4, 0.2); }
+  .risk-high { background: rgba(155, 8, 62, 0.2); }
+  .risk-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .risk-low .risk-label { color: #4caf50; }
+  .risk-medium .risk-label { color: var(--yellow-400); }
+  .risk-high .risk-label { color: #ef5350; }
+  .risk-desc {
+    font-size: 12px;
+    color: #c9a96e;
+  }
+
+  /* Recommendations */
+  .rec-list { display: flex; flex-direction: column; gap: 12px; }
+  .rec-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .rec-priority {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .rec-priority.p1 { background: var(--negative); }
+  .rec-priority.p2 { background: var(--yellow-500); }
+  .rec-priority.p3 { background: var(--positive); }
+  .rec-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--brown-950);
+    margin-bottom: 4px;
+  }
+  .rec-desc {
+    font-size: 13px;
+    color: var(--brown-800);
+    line-height: 1.5;
+  }
+  .rec-tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* Insight Cards */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .insight-card {
+    background: var(--yellow-50);
+    border: 1px solid var(--yellow-200);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .insight-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-950);
+    margin-bottom: 8px;
+  }
+  .insight-card p {
+    font-size: 13px;
+    color: var(--brown-800);
+    line-height: 1.5;
+  }
+  .insight-stat {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--brown-950);
+    margin-bottom: 4px;
+  }
+
+  /* Funnel */
+  .funnel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 6px;
+  }
+  .funnel-label {
+    width: 140px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brown-900);
+    flex-shrink: 0;
+  }
+  .funnel-bar-track {
+    flex: 1;
+    height: 28px;
+    background: var(--yellow-100);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    gap: 2px;
+  }
+  .funnel-bar {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--white);
+    min-width: 40px;
+  }
+  .funnel-bar.control { background: var(--brown-950); }
+  .funnel-bar.variant { background: var(--negative); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    color: var(--brown-800);
+    font-size: 12px;
+  }
+  .footer a { color: var(--yellow-600); text-decoration: none; }
+
+  /* Subscription Comparison Bars */
+  .sub-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .sub-bar-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 60px;
+    gap: 12px;
+    align-items: center;
+  }
+  .sub-bar-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brown-900);
+  }
+  .sub-bar-track {
+    height: 24px;
+    background: var(--yellow-100);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+  }
+  .sub-bar-fill {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--white);
+    transition: width 0.4s ease;
+  }
+  .sub-fill { background: var(--brown-950); }
+  .otp-fill { background: var(--negative); }
+  .sub-bar-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brown-950);
+  }
+
+  /* Utility */
+  .mt-16 { margin-top: 16px; }
+  .mb-16 { margin-bottom: 16px; }
+  .text-center { text-align: center; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+  .disclaimer {
+    font-size: 11px;
+    color: var(--brown-800);
+    padding: 12px 16px;
+    background: var(--yellow-50);
+    border-radius: 6px;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* Print */
+  @media print {
+    .nav-tabs { display: none; }
+    .tab-content { display: block !important; page-break-before: always; }
+    .header { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>Nuora Offer Intelligence Engine</h1>
+  <p>Data-Driven PDP Offer Optimization & Prediction System</p>
+  <div class="version">v1.0 - Built March 2026 - 8 A/B Tests Analyzed - 16,335 Total Visitors</div>
+</div>
+
+<!-- Navigation -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchTab('overview')">Overview</button>
+  <button class="nav-tab" onclick="switchTab('analysis')">Deep Analysis</button>
+  <button class="nav-tab" onclick="switchTab('elements')">Element Impact</button>
+  <button class="nav-tab" onclick="switchTab('configurator')">Offer Configurator</button>
+  <button class="nav-tab" onclick="switchTab('recommendations')">Recommendations</button>
+</div>
+
+<div class="container">
+
+<!-- TAB 1: OVERVIEW -->
+<div id="tab-overview" class="tab-content active">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Control Win Rate</div>
+      <div class="kpi-value">8/8</div>
+      <div class="kpi-sub">Control has won every single test</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Control Conversion</div>
+      <div class="kpi-value">7.65%</div>
+      <div class="kpi-sub">Range: 5.94% - 8.99%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Variant Conversion</div>
+      <div class="kpi-value">5.66%</div>
+      <div class="kpi-sub">-1.99% avg gap from control</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Visitors Tested</div>
+      <div class="kpi-value">16.3K</div>
+      <div class="kpi-sub">Across 8 A/B tests (Jan 2026)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Control Subscription Rate</div>
+      <div class="kpi-value">83%</div>
+      <div class="kpi-sub">Avg across all control groups</div>
+    </div>
+  </div>
+
+  <!-- Conversion Rate Comparison Chart -->
+  <div class="section">
+    <div class="section-title">Conversion Rate: Control vs Variants</div>
+    <div class="section-subtitle">All 8 tests - Control consistently outperforms every variant tested</div>
+    <div class="chart-container">
+      <canvas id="convChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Revenue Impact -->
+  <div class="chart-row">
+    <div class="section">
+      <div class="section-title">Revenue Per Visitor</div>
+      <div class="section-subtitle">How much revenue each visitor generates</div>
+      <div class="chart-container">
+        <canvas id="rpvChart"></canvas>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Subscription vs One-Time Split</div>
+      <div class="section-subtitle">Variant impact on purchase type distribution</div>
+      <div class="chart-container">
+        <canvas id="subChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Test Results Table -->
+  <div class="section">
+    <div class="section-title">Complete Test Results</div>
+    <div class="section-subtitle">Detailed metrics for all 8 A/B tests</div>
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Ver</th>
+            <th>Date</th>
+            <th>Visitors</th>
+            <th>Conv Rate</th>
+            <th>vs Control</th>
+            <th>Rev/Visitor</th>
+            <th>AOV</th>
+            <th>Sub %</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody id="testTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Key Insights Grid -->
+  <div class="section">
+    <div class="section-title">Critical Insights</div>
+    <div class="section-subtitle">Patterns extracted from 8 tests and 16,335 visitors</div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-stat">-26%</div>
+        <h4>Avg Conversion Drop</h4>
+        <p>Variants averaged 5.66% conversion vs control's 7.65% - a 26% relative decrease in purchasing behavior.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-stat">89% vs 62%</div>
+        <h4>Subscription Rate Gap</h4>
+        <p>Control maintains 83%+ subscription rate. Variants with visible OTP drop to 54-80%. The checkbox toggle is the key.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-stat">-28%</div>
+        <h4>Session Duration Impact</h4>
+        <p>Every variant reduced session time by 12-32%. Faster decisions, but worse outcomes. Simplicity doesn't mean clarity.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-stat">Horizontal</div>
+        <h4>Layout Winner</h4>
+        <p>Horizontal card layouts with radio selection consistently outperform vertical stacked cards. Visual scanning patterns favor horizontal.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: DEEP ANALYSIS -->
+<div id="tab-analysis" class="tab-content">
+
+  <!-- Funnel Analysis -->
+  <div class="section">
+    <div class="section-title">Conversion Funnel Comparison</div>
+    <div class="section-subtitle">Average funnel performance - Control (dark) vs Variants (rose)</div>
+    <div class="funnel-container">
+      <div class="funnel-step">
+        <div class="funnel-label">Add to Cart</div>
+        <div class="funnel-bar-track">
+          <div class="funnel-bar control" style="width: 75%">15.0%</div>
+          <div class="funnel-bar variant" style="width: 47%">9.6%</div>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Reached Checkout</div>
+        <div class="funnel-bar-track">
+          <div class="funnel-bar control" style="width: 65%">9.7%</div>
+          <div class="funnel-bar variant" style="width: 45%">7.0%</div>
+        </div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Completed Purchase</div>
+        <div class="funnel-bar-track">
+          <div class="funnel-bar control" style="width: 55%">7.65%</div>
+          <div class="funnel-bar variant" style="width: 35%">5.66%</div>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer">The biggest gap is at Add to Cart (15.0% vs 9.6%) - a 36% drop. This suggests variants are losing visitors before they even engage with the offer. The problem is first-impression UI confusion, not checkout friction.</div>
+  </div>
+
+  <!-- Subscription Breakdown -->
+  <div class="section">
+    <div class="section-title">Subscription Rate by Test</div>
+    <div class="section-subtitle">Percentage of orders that were subscriptions (higher is better for Nuora's business model)</div>
+    <div class="sub-bar-container" id="subBreakdown"></div>
+    <div class="disclaimer mt-16">Control averages 83% subscription rate. Variants with visible OTP options (Ankhway, Omre) dramatically reduce subscription orders. Ryze and Resilia eliminate OTP entirely but lose overall conversion.</div>
+  </div>
+
+  <!-- V1 vs V2 Progress -->
+  <div class="section">
+    <div class="section-title">V1 vs V2 Iteration Progress</div>
+    <div class="section-subtitle">Did V2 versions improve over their V1 counterparts?</div>
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Offer Style</th>
+            <th>V1 Conv Rate</th>
+            <th>V2 Conv Rate</th>
+            <th>Change</th>
+            <th>V1 Sub %</th>
+            <th>V2 Sub %</th>
+            <th>Sub Change</th>
+            <th>V2 Prob to Win</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ankhway</strong></td>
+            <td>4.82%</td>
+            <td>7.16%</td>
+            <td class="positive">+2.34%</td>
+            <td>62%</td>
+            <td>80%</td>
+            <td class="positive">+18%</td>
+            <td>5.49%</td>
+          </tr>
+          <tr>
+            <td><strong>Ryze</strong></td>
+            <td>6.04%</td>
+            <td>6.15%</td>
+            <td class="positive">+0.11%</td>
+            <td>99%</td>
+            <td>100%</td>
+            <td class="positive">+1%</td>
+            <td>2.25%</td>
+          </tr>
+          <tr>
+            <td><strong>Omre</strong></td>
+            <td>5.41%</td>
+            <td>5.47%</td>
+            <td class="positive">+0.06%</td>
+            <td>54%</td>
+            <td>68%</td>
+            <td class="positive">+14%</td>
+            <td>15.98%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight-grid mt-16">
+      <div class="insight-card">
+        <h4>Ankhway V2 - Biggest Improvement</h4>
+        <p>Rounded pricing + "Buy 2 Get 1 Free" lifted conversion by 2.34%. Best V2 improvement but still loses to control. Subscription ratio improved to 80%.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Ryze V2 - Minimal Change</h4>
+        <p>Adding product images only lifted 0.11%. The subscription-only model is the bottleneck, not visual design. 2.25% prob to win - clearly not viable.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Omre V2 - Best Prob to Win</h4>
+        <p>Rounded pricing improved prob to win from ~6% to 15.98%. Still far from competitive. Side-by-side toggle is the core problem.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AOV Analysis -->
+  <div class="section">
+    <div class="section-title">AOV vs Conversion Tradeoff</div>
+    <div class="section-subtitle">Higher AOV doesn't compensate for lower conversion</div>
+    <div class="chart-container">
+      <canvas id="aovChart"></canvas>
+    </div>
+    <div class="disclaimer mt-16">Several variants achieved higher AOV than control (Omre V1: $63.24, Omre V2: $61.02, Ankhway V2: $60.00) but the conversion rate drop always outweighed the AOV gain in total revenue.</div>
+  </div>
+</div>
+
+<!-- TAB 3: ELEMENT IMPACT -->
+<div id="tab-elements" class="tab-content">
+
+  <div class="section">
+    <div class="section-title">Design Element Impact Matrix</div>
+    <div class="section-subtitle">How each design element affects conversion rate and subscription rate based on test data</div>
+
+    <div class="impact-grid">
+      <div class="impact-row" style="background: var(--brown-950); border-left-color: var(--yellow-400);">
+        <div class="impact-element" style="color: var(--yellow-400);">Element</div>
+        <div class="impact-desc" style="color: #c9a96e;">Description</div>
+        <div class="impact-conv" style="color: var(--yellow-400);">Conv Impact</div>
+        <div class="impact-sub" style="color: var(--yellow-400);">Sub Impact</div>
+      </div>
+
+      <!-- Horizontal Layout -->
+      <div class="impact-row positive-impact">
+        <div class="impact-element">Horizontal Cards</div>
+        <div class="impact-desc">Pack options displayed side-by-side horizontally with radio buttons (Control pattern)</div>
+        <div class="impact-conv positive">BASELINE</div>
+        <div class="impact-sub positive">BASELINE</div>
+      </div>
+
+      <!-- Vertical Layout -->
+      <div class="impact-row negative-impact">
+        <div class="impact-element">Vertical Stacked Cards</div>
+        <div class="impact-desc">Options stacked vertically - used in Ankhway, Resilia variants. Increases visual weight of each option.</div>
+        <div class="impact-conv negative">-1.8%</div>
+        <div class="impact-sub negative">-15%</div>
+      </div>
+
+      <!-- Checkbox Toggle -->
+      <div class="impact-row positive-impact">
+        <div class="impact-element">Checkbox Sub Toggle</div>
+        <div class="impact-desc">Dashed border checkbox, pre-selected for subscription. One-time purchase is secondary/hidden. Control pattern.</div>
+        <div class="impact-conv positive">BASELINE</div>
+        <div class="impact-sub positive">BASELINE</div>
+      </div>
+
+      <!-- Side-by-side Toggle -->
+      <div class="impact-row negative-impact">
+        <div class="impact-element">Side-by-Side Toggle</div>
+        <div class="impact-desc">Equal-weight Subscribe/One-time buttons. Gives OTP equal visual prominence. Used in Omre variants.</div>
+        <div class="impact-conv negative">-2.2%</div>
+        <div class="impact-sub negative">-25%</div>
+      </div>
+
+      <!-- Subscription Only -->
+      <div class="impact-row negative-impact">
+        <div class="impact-element">Subscription Only</div>
+        <div class="impact-desc">No one-time purchase option at all. Used in Ryze variants. Eliminates OTP but loses conversion.</div>
+        <div class="impact-conv negative">-1.7%</div>
+        <div class="impact-sub positive">+17%</div>
+      </div>
+
+      <!-- OTP as Separate Card -->
+      <div class="impact-row negative-impact">
+        <div class="impact-element">OTP as Visible Card</div>
+        <div class="impact-desc">One-time purchase shown as a separate selectable card alongside subscription options. Used in Ankhway.</div>
+        <div class="impact-conv negative">-1.4%</div>
+        <div class="impact-sub negative">-21%</div>
+      </div>
+
+      <!-- Pack-based Naming -->
+      <div class="impact-row positive-impact">
+        <div class="impact-element">Pack-Based Naming</div>
+        <div class="impact-desc">"1 Pack / 2 Packs / 3 Packs" - simple, concrete, no interpretation needed. Control pattern.</div>
+        <div class="impact-conv positive">BASELINE</div>
+        <div class="impact-sub positive">BASELINE</div>
+      </div>
+
+      <!-- Time-based Naming -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">Time-Based Naming</div>
+        <div class="impact-desc">"30-day / 90-day supply" - implies commitment duration. Used in Omre, Ankhway variants.</div>
+        <div class="impact-conv negative">-0.5%</div>
+        <div class="impact-sub neutral-val">-5%</div>
+      </div>
+
+      <!-- Creative Naming -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">Creative Bundle Names</div>
+        <div class="impact-desc">"Single Pack / Starter Kit / Ritual Set" - branded names. Used in Ryze variant.</div>
+        <div class="impact-conv negative">-0.4%</div>
+        <div class="impact-sub neutral-val">Neutral</div>
+      </div>
+
+      <!-- BOGO Naming -->
+      <div class="impact-row negative-impact">
+        <div class="impact-element">BOGO Naming</div>
+        <div class="impact-desc">"Buy 2, Get 1 FREE" - perceived higher commitment. Used in Resilia variant.</div>
+        <div class="impact-conv negative">-1.7%</div>
+        <div class="impact-sub negative">-100% OTP</div>
+      </div>
+
+      <!-- 3 Options -->
+      <div class="impact-row positive-impact">
+        <div class="impact-element">3 Pack Options</div>
+        <div class="impact-desc">Three quantity choices (1, 2, 3 packs). Control pattern. Provides balanced optionality.</div>
+        <div class="impact-conv positive">BASELINE</div>
+        <div class="impact-sub positive">BASELINE</div>
+      </div>
+
+      <!-- 2 Options -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">2 Pack Options</div>
+        <div class="impact-desc">Only two quantity choices (1-month, 3-month). Used in Omre variants. Fewer choices may over-simplify.</div>
+        <div class="impact-conv negative">-0.5%</div>
+        <div class="impact-sub neutral-val">-3%</div>
+      </div>
+
+      <!-- Product Images -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">Product Images on Cards</div>
+        <div class="impact-desc">Thumbnail images on each bundle card. Tested in Resilia V1 and Ryze V2. Added visual weight but no conversion lift.</div>
+        <div class="impact-conv neutral-val">~0%</div>
+        <div class="impact-sub neutral-val">Neutral</div>
+      </div>
+
+      <!-- Savings Badges -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">Savings Badges</div>
+        <div class="impact-desc">"Save $X" or "SAVE X%" displayed on cards. Used in Ryze, Omre variants.</div>
+        <div class="impact-conv negative">-0.3%</div>
+        <div class="impact-sub neutral-val">Neutral</div>
+      </div>
+
+      <!-- Rounded Pricing -->
+      <div class="impact-row neutral-impact">
+        <div class="impact-element">Rounded Pricing</div>
+        <div class="impact-desc">Clean round numbers ($40, $100) instead of $39.99. Tested in Omre V2, Ankhway V2.</div>
+        <div class="impact-conv neutral-val">~0%</div>
+        <div class="impact-sub neutral-val">Neutral</div>
+      </div>
+    </div>
+
+    <div class="disclaimer mt-16">
+      Impact values are derived from comparing variant performance against the concurrent control group in each test. Values represent the average directional impact when that element is present. "BASELINE" means this is the control's pattern. Actual impact depends on element combinations.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Element Interaction Heatmap</div>
+    <div class="section-subtitle">Which element combinations have been tested and their outcomes</div>
+    <div class="chart-container">
+      <canvas id="radarChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: OFFER CONFIGURATOR -->
+<div id="tab-configurator" class="tab-content">
+
+  <div class="section">
+    <div class="section-title">Offer Configuration Simulator</div>
+    <div class="section-subtitle">Configure a hypothetical offer and get a predicted performance score based on historical test data</div>
+
+    <div class="config-grid">
+      <div class="config-form" id="configForm">
+        <div class="form-group">
+          <label>Card Layout Direction</label>
+          <select id="cfg-layout" onchange="recalcScore()">
+            <option value="horizontal">Horizontal Cards (Control pattern)</option>
+            <option value="vertical">Vertical Stacked Cards</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Subscription Toggle Type</label>
+          <select id="cfg-toggle" onchange="recalcScore()">
+            <option value="checkbox">Checkbox (pre-selected subscription)</option>
+            <option value="side-by-side">Side-by-Side Buttons (equal weight)</option>
+            <option value="none">No Toggle (subscription only)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>One-Time Purchase Visibility</label>
+          <select id="cfg-otp" onchange="recalcScore()">
+            <option value="hidden">Behind Toggle (less prominent)</option>
+            <option value="separate-card">Separate Visible Card</option>
+            <option value="equal">Equal Visibility to Subscription</option>
+            <option value="none">Not Available</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Bundle Naming Style</label>
+          <select id="cfg-naming" onchange="recalcScore()">
+            <option value="pack">Pack-Based (1 Pack, 2 Packs, 3 Packs)</option>
+            <option value="time">Time-Based (30-day, 90-day supply)</option>
+            <option value="creative">Creative Names (Starter Kit, Ritual Set)</option>
+            <option value="bogo">BOGO (Buy 2 Get 1 Free)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Number of Quantity Options</label>
+          <select id="cfg-options" onchange="recalcScore()">
+            <option value="3">3 Options</option>
+            <option value="2">2 Options</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Pricing Display Style</label>
+          <select id="cfg-pricing" onchange="recalcScore()">
+            <option value="standard">Standard ($X.99)</option>
+            <option value="rounded">Rounded ($40, $100)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Savings Display</label>
+          <select id="cfg-savings" onchange="recalcScore()">
+            <option value="none">No Savings on Cards</option>
+            <option value="dollar">Save $X Amount</option>
+            <option value="percent">Save X% Badge</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Product Images on Cards</label>
+          <select id="cfg-images" onchange="recalcScore()">
+            <option value="no">No Images</option>
+            <option value="yes">Product Thumbnails</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>CTA Copy</label>
+          <select id="cfg-cta" onchange="recalcScore()">
+            <option value="add-to-cart">ADD TO CART</option>
+            <option value="buy-now">BUY NOW</option>
+            <option value="get-started">GET STARTED</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Score Panel -->
+      <div>
+        <div class="score-panel" id="scorePanel">
+          <div class="score-label">Predicted Conversion Rate</div>
+          <div class="score-value" id="scoreValue">7.65%</div>
+          <div class="score-unit" id="scoreComparison">Matches control baseline</div>
+
+          <div class="score-breakdown" id="scoreBreakdown">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div class="risk-meter" id="riskMeter">
+            <div class="risk-label">Risk Level</div>
+            <div class="risk-desc" id="riskDesc">Low risk - matches proven control pattern</div>
+          </div>
+        </div>
+
+        <!-- Predicted Subscription Rate -->
+        <div class="section mt-16" style="margin-bottom: 0;">
+          <div class="section-title">Predicted Subscription Rate</div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px;">
+            <div style="font-size: 36px; font-weight: 800; color: var(--brown-950);" id="subPrediction">83%</div>
+            <div style="font-size: 13px; color: var(--brown-800);" id="subPredDesc">Matches control's subscription capture rate</div>
+          </div>
+        </div>
+
+        <!-- Similar Tested Offers -->
+        <div class="section mt-16" style="margin-bottom: 0;">
+          <div class="section-title">Most Similar Tested Offer</div>
+          <div id="similarOffer" style="margin-top: 12px; font-size: 13px; color: var(--brown-800); line-height: 1.6;">
+            This configuration matches the Control offer. Actual result: 7.65% avg conversion, 83% subscription rate.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: RECOMMENDATIONS -->
+<div id="tab-recommendations" class="tab-content">
+
+  <div class="section">
+    <div class="section-title">Strategic Test Recommendations</div>
+    <div class="section-subtitle">Prioritized recommendations based on data patterns from 8 A/B tests</div>
+
+    <div class="rec-list">
+
+      <div class="rec-card">
+        <div class="rec-priority p1">1</div>
+        <div>
+          <div class="rec-title">Test Individual Elements on Winning Control</div>
+          <div class="rec-desc">
+            Every variant tested so far changed 5+ elements simultaneously (layout, naming, pricing, toggle, CTA). This makes it impossible to isolate what specifically hurts performance. Instead, take the winning control and change ONE element at a time.
+            <br><br>
+            <strong>First test:</strong> Keep everything identical to control but change CTA from "ADD TO CART" to "GET STARTED". This isolates CTA copy impact with zero confounding variables.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-win">HIGH IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p1">2</div>
+        <div>
+          <div class="rec-title">Test Savings Display on Control Layout</div>
+          <div class="rec-desc">
+            The control shows no savings information on pack cards. Test adding "Save $X" or "X% OFF" badges to the existing control horizontal cards while keeping everything else identical. This tests whether savings visibility helps or hurts when the rest of the UI is already optimized.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-win">MEDIUM IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p1">3</div>
+        <div>
+          <div class="rec-title">Test Per-Day Pricing on Control</div>
+          <div class="rec-desc">
+            Control doesn't show per-day or per-serving cost. Several variants included this (Omre: "$1.33/day", Ryze: "$0.59/serving"). Test adding per-day cost to the existing control cards. At $1.14/day for the 3-pack, this could anchor value perception without changing layout.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-win">MEDIUM IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p2">4</div>
+        <div>
+          <div class="rec-title">Test Urgency/Countdown in Offer Module</div>
+          <div class="rec-desc">
+            Control has countdown timer in header only. Ryze variants placed "Sale Ends in" countdown directly inside the offer module. Test moving the countdown timer closer to the CTA button within the existing control layout. Proximity to decision point may increase urgency.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-v2">MEDIUM IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p2">5</div>
+        <div>
+          <div class="rec-title">Test "Most Popular" Badge on 3-Pack</div>
+          <div class="rec-desc">
+            Control has no badges on pack cards. Multiple variants used "Best Deal" or "Most Popular" badges. Test adding a subtle "Most Popular" indicator on the 3-pack option in the control layout. Social proof on the highest-value option may nudge bundle size up.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-v2">MEDIUM IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p2">6</div>
+        <div>
+          <div class="rec-title">Test Dynamic CTA with Price</div>
+          <div class="rec-desc">
+            Control shows static "ADD TO CART". Ankhway V2 showed "BUY NOW | ~~$150~~ $99.99". Test making the control's CTA dynamic: "ADD TO CART - $58.99" showing the selected price. Reinforces value at the action point.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-v2">MEDIUM IMPACT</span>
+            <span class="tag tag-neutral">LOW RISK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p3">7</div>
+        <div>
+          <div class="rec-title">Fix Accidental Subscription Issue</div>
+          <div class="rec-desc">
+            33.2% of subscription cancellations cite "I subscribed by accident". This is the single largest churn driver. While not an offer test, improving the subscription checkbox clarity (perhaps adding a brief tooltip or confirmation step) could reduce cancellations by up to 33% - a massive revenue retention opportunity.
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-lose">CRITICAL</span>
+            <span class="tag tag-win">HIGH IMPACT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-priority p3">8</div>
+        <div>
+          <div class="rec-title">Avoid These Patterns in Future Tests</div>
+          <div class="rec-desc">
+            Based on 8 tests, these patterns consistently underperform:
+            <br>- Vertical stacked cards (avg -1.8% conversion)
+            <br>- Side-by-side Sub/OTP toggle (avg -2.2% conversion)
+            <br>- BOGO naming "Buy X Get Y Free" (eliminates OTP entirely, -1.7% conversion)
+            <br>- Subscription-only model (loses 10-30% of potential orders)
+            <br>- Removing or reducing the 2-pack middle option
+          </div>
+          <div class="rec-tags">
+            <span class="tag tag-lose">AVOID</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testing Methodology -->
+  <div class="section">
+    <div class="section-title">Recommended Testing Methodology</div>
+    <div class="section-subtitle">How to run the next round of tests effectively</div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h4>One Variable at a Time</h4>
+        <p>Change exactly ONE element per test. This isolates causation. All 8 previous tests changed 5+ variables, making it impossible to identify the specific driver of performance differences.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Minimum 2,000 Visitors</h4>
+        <p>Tests with fewer than 1,500 visitors (like Resilia at 1,004) have insufficient statistical power. Target 2,000+ visitors per test for reliable results. At current traffic, this means 12-15 hours runtime.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Always Run Against Live Control</h4>
+        <p>The control's conversion rate varies (5.94% to 8.99%) due to traffic quality fluctuations. Always run the control simultaneously - never compare against historical control numbers.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Track Subscription Rate Separately</h4>
+        <p>A variant could match control on conversion but destroy subscription rate. Always track the Sub/OTP split as a primary metric alongside conversion rate. For Nuora's model, subscription rate is just as important as overall conversion.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- /container -->
+
+<div class="footer">
+  Nuora Offer Intelligence Engine v1.0 - Built by Hardik Dewra - Powered by data from 8 A/B tests, 16,335 visitors, Jan 2026
+  <br>Testing platform: <a href="#">Elevate A/B</a> | Product: Nuora Vaginal Probiotic Gummies | Target: Mobile US traffic
+</div>
+
+<script>
+// ============================================================
+// TEST DATA
+// ============================================================
+const tests = [
+  {
+    name: "Resilia V1",
+    style: "Resilia",
+    version: "V1",
+    date: "Jan 9",
+    visitors: { control: 505, variant: 499 },
+    convRate: { control: 5.94, variant: 4.21 },
+    revenue: { control: 1607.63, variant: 1084.78 },
+    rpv: { control: 3.18, variant: 2.17 },
+    aov: { control: 53.59, variant: 51.66 },
+    orders: { control: 30, variant: 21 },
+    otp: { control: 7, variant: 0 },
+    sub: { control: 23, variant: 21 },
+    session: { control: 34, variant: 30 },
+    probToWin: null,
+    elements: {
+      layout: "vertical", toggle: "checkbox", otpVis: "hidden",
+      naming: "bogo", options: 3, pricing: "standard",
+      savings: "percent", images: true
+    }
+  },
+  {
+    name: "Ankhway V1",
+    style: "Ankhway",
+    version: "V1",
+    date: "Jan 17",
+    visitors: { control: 788, variant: 809 },
+    convRate: { control: 6.98, variant: 4.82 },
+    revenue: { control: 2941.07, variant: 2104.39 },
+    rpv: { control: 3.73, variant: 2.60 },
+    aov: { control: 53.47, variant: 53.96 },
+    orders: { control: 55, variant: 39 },
+    otp: { control: 6, variant: 15 },
+    sub: { control: 49, variant: 24 },
+    session: { control: 41, variant: 29 },
+    probToWin: null,
+    elements: {
+      layout: "vertical", toggle: "none-separate", otpVis: "separate-card",
+      naming: "time", options: 2, pricing: "standard",
+      savings: "percent", images: false
+    }
+  },
+  {
+    name: "Ryze V1",
+    style: "Ryze",
+    version: "V1",
+    date: "Jan 21",
+    visitors: { control: 1296, variant: 1341 },
+    convRate: { control: 7.72, variant: 6.04 },
+    revenue: { control: 5609.88, variant: 4229.43 },
+    rpv: { control: 4.33, variant: 3.15 },
+    aov: { control: 56.10, variant: 51.58 },
+    orders: { control: 100, variant: 82 },
+    otp: { control: 21, variant: 1 },
+    sub: { control: 79, variant: 81 },
+    session: { control: 44, variant: 33 },
+    probToWin: null,
+    elements: {
+      layout: "vertical", toggle: "none", otpVis: "none",
+      naming: "creative", options: 3, pricing: "standard",
+      savings: "dollar", images: false
+    }
+  },
+  {
+    name: "Omre V1",
+    style: "Omre",
+    version: "V1",
+    date: "Jan 21",
+    visitors: { control: 1429, variant: 1498 },
+    convRate: { control: 7.91, variant: 5.41 },
+    revenue: { control: 6173.05, variant: 5122.25 },
+    rpv: { control: 4.32, variant: 3.42 },
+    aov: { control: 54.63, variant: 63.24 },
+    orders: { control: 113, variant: 81 },
+    otp: { control: 23, variant: 37 },
+    sub: { control: 90, variant: 44 },
+    session: { control: 47, variant: 33 },
+    probToWin: null,
+    elements: {
+      layout: "vertical", toggle: "side-by-side", otpVis: "equal",
+      naming: "time", options: 2, pricing: "standard",
+      savings: "percent", images: false
+    }
+  },
+  {
+    name: "Ankhway V2",
+    style: "Ankhway",
+    version: "V2",
+    date: "Jan 30",
+    visitors: { control: 2091, variant: 2052 },
+    convRate: { control: 8.23, variant: 7.16 },
+    revenue: { control: 10726.85, variant: 8880.20 },
+    rpv: { control: 5.13, variant: 4.33 },
+    aov: { control: 55.58, variant: 60.00 },
+    orders: { control: 193, variant: 147 },
+    otp: { control: 40, variant: 29 },
+    sub: { control: 153, variant: 119 },
+    session: { control: 50, variant: 34 },
+    probToWin: 5.49,
+    elements: {
+      layout: "vertical", toggle: "none-separate", otpVis: "separate-card",
+      naming: "time", options: 2, pricing: "rounded",
+      savings: "percent", images: false
+    }
+  },
+  {
+    name: "Ryze V2",
+    style: "Ryze",
+    version: "V2",
+    date: "Jan 30",
+    visitors: { control: 712, variant: 715 },
+    convRate: { control: 8.99, variant: 6.15 },
+    revenue: { control: 3201.68, variant: 2162.68 },
+    rpv: { control: 4.50, variant: 3.02 },
+    aov: { control: 50.03, variant: 49.15 },
+    orders: { control: 64, variant: 44 },
+    otp: { control: 14, variant: 0 },
+    sub: { control: 50, variant: 44 },
+    session: { control: 46, variant: 34 },
+    probToWin: 2.25,
+    elements: {
+      layout: "vertical", toggle: "none", otpVis: "none",
+      naming: "creative", options: 3, pricing: "standard",
+      savings: "dollar", images: true
+    }
+  },
+  {
+    name: "Omre V2",
+    style: "Omre",
+    version: "V2",
+    date: "Jan 30",
+    visitors: { control: 795, variant: 805 },
+    convRate: { control: 7.42, variant: 5.47 },
+    revenue: { control: 3157.50, variant: 2685.08 },
+    rpv: { control: 3.97, variant: 3.34 },
+    aov: { control: 52.63, variant: 61.02 },
+    orders: { control: 59, variant: 44 },
+    otp: { control: 8, variant: 14 },
+    sub: { control: 51, variant: 30 },
+    session: { control: 41, variant: 34 },
+    probToWin: 15.98,
+    elements: {
+      layout: "vertical", toggle: "side-by-side", otpVis: "equal",
+      naming: "time", options: 2, pricing: "rounded",
+      savings: "percent", images: false
+    }
+  }
+];
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============================================================
+// CHART COLORS
+// ============================================================
+const colors = {
+  control: '#542C0D',
+  variant: '#9B083E',
+  controlLight: 'rgba(84, 44, 13, 0.7)',
+  variantLight: 'rgba(155, 8, 62, 0.7)',
+  yellow: '#FAC515',
+  yellowLight: 'rgba(250, 197, 21, 0.3)',
+  grid: 'rgba(113, 59, 18, 0.1)'
+};
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    legend: {
+      labels: {
+        font: { family: "'Montserrat', sans-serif", size: 12, weight: '600' },
+        color: '#713B12'
+      }
+    }
+  },
+  scales: {
+    x: {
+      ticks: { font: { family: "'Montserrat', sans-serif", size: 11 }, color: '#854A0E' },
+      grid: { color: colors.grid }
+    },
+    y: {
+      ticks: { font: { family: "'Montserrat', sans-serif", size: 11 }, color: '#854A0E' },
+      grid: { color: colors.grid }
+    }
+  }
+};
+
+// ============================================================
+// CONVERSION RATE CHART
+// ============================================================
+new Chart(document.getElementById('convChart'), {
+  type: 'bar',
+  data: {
+    labels: tests.map(t => t.name),
+    datasets: [
+      {
+        label: 'Control',
+        data: tests.map(t => t.convRate.control),
+        backgroundColor: colors.control,
+        borderRadius: 4
+      },
+      {
+        label: 'Variant',
+        data: tests.map(t => t.convRate.variant),
+        backgroundColor: colors.variant,
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: {
+      ...chartDefaults.plugins,
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}%`
+        }
+      }
+    },
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        beginAtZero: true,
+        ticks: {
+          ...chartDefaults.scales.y.ticks,
+          callback: (v) => v + '%'
+        }
+      }
+    }
+  }
+});
+
+// ============================================================
+// REVENUE PER VISITOR CHART
+// ============================================================
+new Chart(document.getElementById('rpvChart'), {
+  type: 'bar',
+  data: {
+    labels: tests.map(t => t.name),
+    datasets: [
+      {
+        label: 'Control RPV',
+        data: tests.map(t => t.rpv.control),
+        backgroundColor: colors.control,
+        borderRadius: 4
+      },
+      {
+        label: 'Variant RPV',
+        data: tests.map(t => t.rpv.variant),
+        backgroundColor: colors.variant,
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: {
+      ...chartDefaults.plugins,
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}`
+        }
+      }
+    },
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        beginAtZero: true,
+        ticks: {
+          ...chartDefaults.scales.y.ticks,
+          callback: (v) => '$' + v
+        }
+      }
+    }
+  }
+});
+
+// ============================================================
+// SUBSCRIPTION CHART
+// ============================================================
+new Chart(document.getElementById('subChart'), {
+  type: 'bar',
+  data: {
+    labels: tests.map(t => t.name),
+    datasets: [
+      {
+        label: 'Control Sub %',
+        data: tests.map(t => Math.round(t.sub.control / t.orders.control * 100)),
+        backgroundColor: colors.control,
+        borderRadius: 4
+      },
+      {
+        label: 'Variant Sub %',
+        data: tests.map(t => t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 0),
+        backgroundColor: colors.variant,
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          ...chartDefaults.scales.y.ticks,
+          callback: (v) => v + '%'
+        }
+      }
+    }
+  }
+});
+
+// ============================================================
+// TEST RESULTS TABLE
+// ============================================================
+const tableBody = document.getElementById('testTable');
+tests.forEach(t => {
+  const subPct = t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 100;
+  const diff = (t.convRate.variant - t.convRate.control).toFixed(2);
+  const totalVisitors = t.visitors.control + t.visitors.variant;
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td><strong>${t.name}</strong></td>
+    <td><span class="tag ${t.version === 'V1' ? 'tag-v1' : 'tag-v2'}">${t.version}</span></td>
+    <td>${t.date}</td>
+    <td>${totalVisitors.toLocaleString()}</td>
+    <td>${t.convRate.variant}%</td>
+    <td class="${parseFloat(diff) < 0 ? 'negative' : 'positive'}">${diff}%</td>
+    <td>$${t.rpv.variant.toFixed(2)}</td>
+    <td>$${t.aov.variant.toFixed(2)}</td>
+    <td>${subPct}%</td>
+    <td><span class="tag tag-lose">CONTROL WINS</span></td>
+  `;
+  tableBody.appendChild(row);
+});
+
+// ============================================================
+// SUBSCRIPTION BREAKDOWN BARS
+// ============================================================
+const subContainer = document.getElementById('subBreakdown');
+
+// Add control first
+const controlAvgSub = Math.round(tests.reduce((sum, t) => sum + (t.sub.control / t.orders.control * 100), 0) / tests.length);
+const controlRow = document.createElement('div');
+controlRow.className = 'sub-bar-row';
+controlRow.innerHTML = `
+  <div class="sub-bar-label" style="font-weight:700;">Control (Avg)</div>
+  <div class="sub-bar-track">
+    <div class="sub-bar-fill sub-fill" style="width:${controlAvgSub}%">SUB</div>
+    <div class="sub-bar-fill otp-fill" style="width:${100-controlAvgSub}%">OTP</div>
+  </div>
+  <div class="sub-bar-pct">${controlAvgSub}% sub</div>
+`;
+subContainer.appendChild(controlRow);
+
+tests.forEach(t => {
+  const subPct = t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 100;
+  const otpPct = 100 - subPct;
+  const row = document.createElement('div');
+  row.className = 'sub-bar-row';
+  row.innerHTML = `
+    <div class="sub-bar-label">${t.name}</div>
+    <div class="sub-bar-track">
+      <div class="sub-bar-fill sub-fill" style="width:${subPct}%">${subPct > 15 ? 'SUB' : ''}</div>
+      <div class="sub-bar-fill otp-fill" style="width:${otpPct}%">${otpPct > 15 ? 'OTP' : ''}</div>
+    </div>
+    <div class="sub-bar-pct">${subPct}% sub</div>
+  `;
+  subContainer.appendChild(row);
+});
+
+// ============================================================
+// AOV CHART (Scatter)
+// ============================================================
+new Chart(document.getElementById('aovChart'), {
+  type: 'scatter',
+  data: {
+    datasets: [
+      {
+        label: 'Control',
+        data: tests.map(t => ({ x: t.convRate.control, y: t.aov.control })),
+        backgroundColor: colors.control,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      },
+      {
+        label: 'Variant',
+        data: tests.map(t => ({ x: t.convRate.variant, y: t.aov.variant })),
+        backgroundColor: colors.variant,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: {
+        ...chartDefaults.scales.x,
+        title: { display: true, text: 'Conversion Rate (%)', font: { family: "'Montserrat', sans-serif", weight: '600' }, color: '#713B12' },
+        ticks: { ...chartDefaults.scales.x.ticks, callback: v => v + '%' }
+      },
+      y: {
+        ...chartDefaults.scales.y,
+        title: { display: true, text: 'AOV ($)', font: { family: "'Montserrat', sans-serif", weight: '600' }, color: '#713B12' },
+        ticks: { ...chartDefaults.scales.y.ticks, callback: v => '$' + v }
+      }
+    },
+    plugins: {
+      ...chartDefaults.plugins,
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x}% conv, $${ctx.parsed.y.toFixed(2)} AOV`
+        }
+      }
+    }
+  }
+});
+
+// ============================================================
+// RADAR CHART (Element Scores)
+// ============================================================
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Layout', 'Toggle Type', 'OTP Visibility', 'Naming', 'Options Count', 'Pricing'],
+    datasets: [
+      {
+        label: 'Control (Baseline)',
+        data: [10, 10, 10, 10, 10, 10],
+        borderColor: colors.control,
+        backgroundColor: 'rgba(84, 44, 13, 0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: colors.control
+      },
+      {
+        label: 'Best Variant (Ankhway V2)',
+        data: [5, 6, 6, 7, 7, 8],
+        borderColor: '#CA8504',
+        backgroundColor: 'rgba(202, 133, 4, 0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: '#CA8504'
+      },
+      {
+        label: 'Worst Variant (Resilia V1)',
+        data: [5, 8, 8, 3, 10, 7],
+        borderColor: colors.variant,
+        backgroundColor: 'rgba(155, 8, 62, 0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: colors.variant
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      r: {
+        min: 0,
+        max: 10,
+        ticks: {
+          stepSize: 2,
+          font: { family: "'Montserrat', sans-serif", size: 10 },
+          color: '#854A0E',
+          backdropColor: 'transparent'
+        },
+        pointLabels: {
+          font: { family: "'Montserrat', sans-serif", size: 12, weight: '600' },
+          color: '#542C0D'
+        },
+        grid: { color: colors.grid }
+      }
+    },
+    plugins: {
+      legend: {
+        labels: {
+          font: { family: "'Montserrat', sans-serif", size: 12, weight: '600' },
+          color: '#713B12'
+        }
+      }
+    }
+  }
+});
+
+// ============================================================
+// OFFER CONFIGURATOR - SCORING ALGORITHM
+// ============================================================
+const scoringWeights = {
+  layout: { horizontal: 0, vertical: -1.8 },
+  toggle: { checkbox: 0, 'side-by-side': -2.2, none: -1.7 },
+  otp: { hidden: 0, 'separate-card': -1.4, equal: -2.0, none: -1.0 },
+  naming: { pack: 0, time: -0.5, creative: -0.4, bogo: -1.7 },
+  options: { '3': 0, '2': -0.5 },
+  pricing: { standard: 0, rounded: -0.1 },
+  savings: { none: 0, dollar: -0.3, percent: -0.3 },
+  images: { no: 0, yes: 0 },
+  cta: { 'add-to-cart': 0, 'buy-now': -0.1, 'get-started': -0.1 }
+};
+
+const subWeights = {
+  layout: { horizontal: 0, vertical: -8 },
+  toggle: { checkbox: 0, 'side-by-side': -25, none: 5 },
+  otp: { hidden: 0, 'separate-card': -15, equal: -20, none: 17 },
+  naming: { pack: 0, time: -3, creative: 0, bogo: -5 },
+  options: { '3': 0, '2': -2 },
+  pricing: { standard: 0, rounded: 0 },
+  savings: { none: 0, dollar: 0, percent: 0 },
+  images: { no: 0, yes: 0 },
+  cta: { 'add-to-cart': 0, 'buy-now': 0, 'get-started': 0 }
+};
+
+const BASE_CONV = 7.65;
+const BASE_SUB = 83;
+
+function recalcScore() {
+  const vals = {
+    layout: document.getElementById('cfg-layout').value,
+    toggle: document.getElementById('cfg-toggle').value,
+    otp: document.getElementById('cfg-otp').value,
+    naming: document.getElementById('cfg-naming').value,
+    options: document.getElementById('cfg-options').value,
+    pricing: document.getElementById('cfg-pricing').value,
+    savings: document.getElementById('cfg-savings').value,
+    images: document.getElementById('cfg-images').value,
+    cta: document.getElementById('cfg-cta').value
+  };
+
+  let totalConv = 0;
+  let totalSub = 0;
+  const breakdown = [];
+
+  for (const [key, val] of Object.entries(vals)) {
+    const convImpact = scoringWeights[key]?.[val] || 0;
+    const subImpact = subWeights[key]?.[val] || 0;
+    totalConv += convImpact;
+    totalSub += subImpact;
+
+    if (convImpact !== 0) {
+      const label = key.charAt(0).toUpperCase() + key.slice(1);
+      breakdown.push({
+        label: `${label}: ${val}`,
+        value: convImpact,
+        cls: convImpact > 0 ? 'pos' : convImpact < 0 ? 'neg' : 'neutral-val'
+      });
+    }
+  }
+
+  const predictedConv = Math.max(0, BASE_CONV + totalConv);
+  const predictedSub = Math.max(0, Math.min(100, BASE_SUB + totalSub));
+
+  // Update score display
+  document.getElementById('scoreValue').textContent = predictedConv.toFixed(2) + '%';
+
+  const diff = totalConv;
+  if (diff === 0) {
+    document.getElementById('scoreComparison').textContent = 'Matches control baseline';
+  } else if (diff > 0) {
+    document.getElementById('scoreComparison').textContent = `+${diff.toFixed(2)}% above control`;
+  } else {
+    document.getElementById('scoreComparison').textContent = `${diff.toFixed(2)}% below control`;
+  }
+
+  // Breakdown
+  const breakdownEl = document.getElementById('scoreBreakdown');
+  breakdownEl.innerHTML = '<div class="score-item"><span class="score-item-label">Base (Control avg)</span><span class="score-item-value neutral-val">' + BASE_CONV + '%</span></div>';
+  breakdown.forEach(b => {
+    breakdownEl.innerHTML += `<div class="score-item"><span class="score-item-label">${b.label}</span><span class="score-item-value ${b.cls}">${b.value > 0 ? '+' : ''}${b.value.toFixed(1)}%</span></div>`;
+  });
+
+  // Risk meter
+  const riskEl = document.getElementById('riskMeter');
+  const riskDesc = document.getElementById('riskDesc');
+  riskEl.className = 'risk-meter';
+  if (totalConv >= -0.5) {
+    riskEl.classList.add('risk-low');
+    riskDesc.textContent = 'Low risk - close to proven control pattern';
+  } else if (totalConv >= -2.0) {
+    riskEl.classList.add('risk-medium');
+    riskDesc.textContent = 'Medium risk - some untested or historically negative elements';
+  } else {
+    riskEl.classList.add('risk-high');
+    riskDesc.textContent = 'High risk - multiple elements that have historically hurt conversion';
+  }
+
+  // Subscription prediction
+  document.getElementById('subPrediction').textContent = Math.round(predictedSub) + '%';
+  if (predictedSub >= 80) {
+    document.getElementById('subPredDesc').textContent = 'Strong subscription capture - aligned with business model';
+  } else if (predictedSub >= 60) {
+    document.getElementById('subPredDesc').textContent = 'Moderate subscription rate - some leakage to OTP expected';
+  } else {
+    document.getElementById('subPredDesc').textContent = 'Warning: Low subscription rate - may hurt recurring revenue';
+  }
+
+  // Find most similar tested offer
+  findSimilarOffer(vals, predictedConv, predictedSub);
+}
+
+function findSimilarOffer(config, predConv, predSub) {
+  let bestMatch = null;
+  let bestScore = -1;
+
+  tests.forEach(t => {
+    let score = 0;
+    if (config.layout === t.elements.layout) score += 3;
+    if (config.toggle === t.elements.toggle || (config.toggle === 'none' && t.elements.toggle === 'none')) score += 3;
+    if (config.naming === t.elements.naming) score += 2;
+    if (config.options === String(t.elements.options)) score += 1;
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = t;
+    }
+  });
+
+  const el = document.getElementById('similarOffer');
+  if (bestMatch && bestScore > 3) {
+    const subPct = bestMatch.orders.variant > 0 ? Math.round(bestMatch.sub.variant / bestMatch.orders.variant * 100) : 100;
+    el.innerHTML = `Most similar tested offer: <strong>${bestMatch.name}</strong><br>Actual result: ${bestMatch.convRate.variant}% conversion, ${subPct}% subscription rate, $${bestMatch.aov.variant.toFixed(2)} AOV<br><span style="color: var(--negative);">Result: Control won this test</span>`;
+  } else if (config.layout === 'horizontal' && config.toggle === 'checkbox') {
+    el.innerHTML = `This configuration closely matches the <strong>Control</strong> offer.<br>Actual result: 7.65% avg conversion, 83% subscription rate.<br><span style="color: var(--positive);">This is the proven winning pattern.</span>`;
+  } else {
+    el.innerHTML = `No closely matching tested offer found. This would be a novel configuration worth testing if conversion prediction looks favorable.`;
+  }
+}
+
+// Initialize configurator
+recalcScore();
+</script>
+
+</body>
+</html>

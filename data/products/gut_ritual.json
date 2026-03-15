@@ -1,0 +1,24 @@
+{
+  "product_name": "Nuora Gut Ritual",
+  "handle": "gut-capsule",
+  "url": "https://mynuora.com/products/gut-capsule",
+  "type": "capsules",
+  "scraped_at": "2026-03-15",
+  "pricing": {
+    "variants": {
+      "1_bottle": {"price": 59.00, "variant_id": "45566109024396"},
+      "2_bottles": {"price": 69.00, "variant_id": "45566109057164"},
+      "3_bottles": {"price": 79.00, "variant_id": "45566109089932"}
+    },
+    "price_range": {"low": 59.00, "high": 79.00}
+  },
+  "reviews": {
+    "count": 11847,
+    "average_rating": 4.57,
+    "platform": "Judge.me"
+  },
+  "shipping": {
+    "free_shipping": true,
+    "country": "US"
+  }
+}

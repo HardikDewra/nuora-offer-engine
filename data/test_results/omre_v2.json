@@ -1,0 +1,88 @@
+{
+  "name": "Omre V2",
+  "style": "Omre",
+  "version": "V2",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-super-package",
+  "inspiration": "https://omre.co/products/nmn-resveratrol",
+  "test_date": "2026-01-30",
+  "duration_hours": 15,
+  "result": "control_wins",
+  "probability_to_win": 15.98,
+  "changes_from_v1": "Simplified rounded pricing ($40, $100 vs $39.99, $79.99)",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "side_by_side",
+    "otp_visibility": "equal_weight",
+    "naming": "time_based",
+    "num_options": 2,
+    "pricing_display": "rounded",
+    "savings_display": "percent",
+    "product_images": false,
+    "cta_copy": "add_to_cart",
+    "bundle_names": ["1-month supply", "3-month supply"],
+    "badges": ["SAVE 33%", "SAVE 44%", "Most popular"],
+    "dynamic_pricing": true,
+    "subscription_info_location": "inside_selected_card"
+  },
+  "pricing": {
+    "subscription": {
+      "1_month": {"price": 40.00, "compare": 60.00, "discount_pct": 33, "per_day": 1.33},
+      "3_month": {"price": 100.00, "compare": 180.00, "discount_pct": 44, "per_pack": 33.33, "per_day": 1.11}
+    },
+    "one_time": {
+      "1_month": {"price": 60.00},
+      "3_month": {"price": 180.00}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 795,
+      "revenue": 3157.50,
+      "revenue_per_visitor": 3.97,
+      "conversion_rate": 7.42,
+      "orders": 59,
+      "aov": 52.63,
+      "profit": 1933.50,
+      "profit_per_visitor": 2.43,
+      "shipping_revenue": 0.00,
+      "add_to_cart_rate": 15.7,
+      "reached_checkout_rate": 10.2,
+      "session_duration_sec": 41,
+      "otp_orders": 8,
+      "subscription_orders": 51,
+      "subscription_rate": 86.4
+    },
+    "variant": {
+      "visitors": 805,
+      "revenue": 2685.08,
+      "revenue_per_visitor": 3.34,
+      "conversion_rate": 5.47,
+      "orders": 44,
+      "aov": 61.02,
+      "profit": 2370.08,
+      "profit_per_visitor": 2.94,
+      "shipping_revenue": 84.15,
+      "add_to_cart_rate": 10.6,
+      "reached_checkout_rate": 7.5,
+      "session_duration_sec": 34,
+      "otp_orders": 14,
+      "subscription_orders": 30,
+      "subscription_rate": 68.2
+    }
+  },
+  "v1_comparison": {
+    "v1_conv_rate": 5.41,
+    "v2_conv_rate": 5.47,
+    "improvement": 0.06,
+    "v1_sub_rate": 54.3,
+    "v2_sub_rate": 68.2,
+    "sub_improvement": 13.9
+  },
+  "key_learnings": [
+    "Rounded pricing did not significantly improve conversion (5.41% -> 5.47%)",
+    "Side-by-side toggle continues to cannibalize subscriptions (51 -> 30)",
+    "Subscription ratio improved vs V1 (68% vs 54%) but still worse than control (86%)",
+    "Higher AOV ($61.02) suggests larger bundle purchases but fewer total orders",
+    "The side-by-side Sub/OTP toggle design is fundamentally flawed for Nuora"
+  ]
+}

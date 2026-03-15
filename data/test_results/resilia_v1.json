@@ -1,0 +1,79 @@
+{
+  "name": "Resilia V1",
+  "style": "Resilia",
+  "version": "V1",
+  "url": "https://mynuora.com/products/nuora-vaginal-probiotic-gummies-2?variant=45614888747148",
+  "inspiration": "https://resilia.shop",
+  "test_date": "2026-01-09",
+  "duration_hours": 5,
+  "result": "control_wins",
+  "design": {
+    "layout": "vertical",
+    "toggle_type": "checkbox",
+    "otp_visibility": "behind_toggle",
+    "naming": "bogo",
+    "num_options": 3,
+    "pricing_display": "standard",
+    "savings_display": "percent",
+    "product_images": true,
+    "cta_copy": "add_to_cart",
+    "bundle_names": ["Buy One", "Buy 2, Get 1 FREE", "Buy 3, Get 2 FREE"],
+    "badges": ["Most Popular", "Free Shipping"],
+    "dynamic_pricing": true
+  },
+  "pricing": {
+    "subscription": {
+      "buy_one": {"price": 29.99, "compare": 59.99, "savings_pct": 50},
+      "buy_2_get_1": {"price": 59.99, "compare": 179.97, "savings_pct": 67},
+      "buy_3_get_2": {"price": 89.99, "compare": 299.95, "savings_pct": 70}
+    },
+    "one_time": {
+      "buy_one": {"price": 39.99, "compare": 59.99, "savings_pct": 33},
+      "buy_2_get_1": {"price": 79.99, "compare": 179.97, "savings_pct": 56},
+      "buy_3_get_2": {"price": 119.99, "compare": 299.95, "savings_pct": 60}
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 505,
+      "revenue": 1607.63,
+      "revenue_per_visitor": 3.18,
+      "conversion_rate": 5.94,
+      "orders": 30,
+      "aov": 53.59,
+      "profit": 995.63,
+      "profit_per_visitor": 1.97,
+      "shipping_revenue": 4.95,
+      "add_to_cart_rate": 12.1,
+      "reached_checkout_rate": 8.3,
+      "session_duration_sec": 34,
+      "otp_orders": 7,
+      "subscription_orders": 23,
+      "subscription_rate": 76.7
+    },
+    "variant": {
+      "visitors": 499,
+      "revenue": 1084.78,
+      "revenue_per_visitor": 2.17,
+      "conversion_rate": 4.21,
+      "orders": 21,
+      "aov": 51.66,
+      "profit": 1075.78,
+      "profit_per_visitor": 2.16,
+      "shipping_revenue": 49.50,
+      "add_to_cart_rate": 8.6,
+      "reached_checkout_rate": 5.4,
+      "session_duration_sec": 30,
+      "otp_orders": 0,
+      "subscription_orders": 21,
+      "subscription_rate": 100.0
+    }
+  },
+  "key_learnings": [
+    "BOGO naming completely eliminated OTP orders (7 -> 0)",
+    "Despite 100% subscription rate, overall conversion dropped -1.73%",
+    "The 'free' framing created perceived commitment that deterred purchases",
+    "Product images on cards did not improve conversion",
+    "Session duration barely dropped (-11.8%) - smallest drop among all variants"
+  ]
+}
