@@ -630,6 +630,144 @@
   }
   .footer a { color: var(--yellow-600); text-decoration: none; }
 
+  /* ==================== INTERACTIVE KPI ==================== */
+  .kpi-card {
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+    position: relative;
+  }
+  .kpi-card:hover {
+    border-color: var(--yellow-400);
+  }
+  .kpi-card::after {
+    content: '+';
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--yellow-500);
+    transition: transform 0.2s ease;
+  }
+  .kpi-card.expanded::after {
+    content: '-';
+  }
+  .kpi-drawer {
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-solid);
+    font-size: 12px;
+    color: var(--brown-800);
+    line-height: 1.6;
+  }
+  .kpi-card.expanded .kpi-drawer {
+    display: block;
+  }
+  .kpi-drawer table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .kpi-drawer table th {
+    text-align: left;
+    font-weight: 700;
+    color: var(--brown-950);
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--border-solid);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .kpi-drawer table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid rgba(113,59,18,0.05);
+  }
+
+  /* ==================== DATA EXPLORER ==================== */
+  .data-card {
+    background: var(--white);
+    border: 1px solid var(--border-solid);
+    border-radius: 1px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .data-card-header {
+    padding: 14px 18px;
+    background: var(--yellow-50);
+    border-bottom: 1px solid var(--border-solid);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .data-card-header:hover { background: var(--yellow-100); }
+  .data-card-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--brown-950);
+  }
+  .data-card-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--yellow-600);
+    letter-spacing: 0.04em;
+  }
+  .data-card-body {
+    display: none;
+    padding: 16px 18px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .data-card.open .data-card-body {
+    display: block;
+  }
+  .data-card-toggle {
+    font-size: 18px;
+    color: var(--yellow-500);
+    font-weight: 700;
+    transition: transform 0.2s ease;
+  }
+  .data-card.open .data-card-toggle {
+    transform: rotate(45deg);
+  }
+  .principle-row {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(113,59,18,0.06);
+  }
+  .principle-row:last-child { border-bottom: none; }
+  .principle-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brown-950);
+    margin-bottom: 4px;
+  }
+  .principle-evidence {
+    font-size: 11px;
+    color: var(--brown-800);
+  }
+  .principle-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 1px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+  }
+  .badge-proven { background: var(--positive-bg); color: var(--positive); }
+  .badge-likely { background: var(--yellow-100); color: var(--yellow-600); }
+  .badge-hypothesis { background: var(--blue-light); color: var(--blue-primary); }
+  .weight-bar {
+    display: inline-block;
+    height: 8px;
+    border-radius: 1px;
+    vertical-align: middle;
+  }
+
   @media print {
     .nav-tabs { display: none; }
     .tab-content { display: block !important; page-break-before: always; }
@@ -657,6 +795,7 @@
   <button class="nav-tab" onclick="switchTab('elements')">Element Impact</button>
   <button class="nav-tab" onclick="switchTab('configurator')">Offer Configurator</button>
   <button class="nav-tab" onclick="switchTab('recommendations')">Recommendations</button>
+  <button class="nav-tab" onclick="switchTab('data')">Data Explorer</button>
 </div>
 
 <div class="container">
@@ -673,30 +812,35 @@
 <div id="tab-overview" class="tab-content active">
 
   <div class="kpi-grid">
-    <div class="kpi-card highlight">
+    <div class="kpi-card highlight" onclick="this.classList.toggle('expanded')">
       <div class="kpi-label">Control Win Rate</div>
       <div class="kpi-value">7/7</div>
       <div class="kpi-sub">Control has won every single test</div>
+      <div class="kpi-drawer" id="kpi-wins"></div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
       <div class="kpi-label">Avg Control Conversion</div>
       <div class="kpi-value">7.60%</div>
       <div class="kpi-sub">Range: 5.94% - 8.99%</div>
+      <div class="kpi-drawer" id="kpi-ctrl-conv"></div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
       <div class="kpi-label">Avg Variant Conversion</div>
       <div class="kpi-value">5.61%</div>
       <div class="kpi-sub">-1.99% avg gap from control</div>
+      <div class="kpi-drawer" id="kpi-var-conv"></div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
       <div class="kpi-label">Total Visitors Tested</div>
       <div class="kpi-value">15.3K</div>
       <div class="kpi-sub">Across 7 A/B tests (Jan 2026)</div>
+      <div class="kpi-drawer" id="kpi-visitors"></div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
       <div class="kpi-label">Control Subscription Rate</div>
       <div class="kpi-value">81%</div>
       <div class="kpi-sub">Avg across all control groups</div>
+      <div class="kpi-drawer" id="kpi-sub-rate"></div>
     </div>
   </div>
 
@@ -1040,6 +1184,66 @@
   </div>
 </div>
 
+<!-- TAB 6: DATA EXPLORER -->
+<div id="tab-data" class="tab-content">
+
+  <div class="section">
+    <div class="section-title">Data Explorer</div>
+    <div class="section-subtitle">Browse all structured test data, proven principles, and scoring weights. Click any section to expand.</div>
+  </div>
+
+  <div class="data-card open" id="dc-tests">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">All Test Results</span> <span class="data-card-count">7 tests</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body">
+      <table class="data-table" id="explorerTestTable"></table>
+    </div>
+  </div>
+
+  <div class="data-card" id="dc-principles">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">Proven Principles</span> <span class="data-card-count">9 principles</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body" id="principlesList"></div>
+  </div>
+
+  <div class="data-card" id="dc-weights">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">Scoring Weights</span> <span class="data-card-count">9 elements</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body" id="weightsList"></div>
+  </div>
+
+  <div class="data-card" id="dc-pricing">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">Pricing Across Tests</span> <span class="data-card-count">All price points</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body" id="pricingList"></div>
+  </div>
+
+  <div class="data-card" id="dc-learnings">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">Key Learnings</span> <span class="data-card-count" id="learningsCount">36 learnings</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body" id="learningsList"></div>
+  </div>
+
+  <div class="data-card" id="dc-design">
+    <div class="data-card-header" onclick="this.parentElement.classList.toggle('open')">
+      <div><span class="data-card-title">Design Elements Per Test</span> <span class="data-card-count">7 configs</span></div>
+      <span class="data-card-toggle">+</span>
+    </div>
+    <div class="data-card-body" id="designList"></div>
+  </div>
+
+</div>
+
 </div>
 
 <div class="footer">
@@ -1224,6 +1428,217 @@ function recalcScore(){
   else{let best=null,bs=-1;tests.forEach(t=>{let s=0;if(v.layout===(t.style==='Ryze'||t.style==='Resilia'?'vertical':'vertical'))s+=2;s+=1;if(s>bs){bs=s;best=t;}});if(best){const sp2=best.orders.variant>0?Math.round(best.sub.variant/best.orders.variant*100):100;so.innerHTML=`Similar to <strong>${best.name}</strong>. Actual: ${best.convRate.variant}% conv, ${sp2}% sub, $${best.aov.variant.toFixed(2)} AOV. <span style="color:var(--negative);">Control won.</span>`;}}
 }
 recalcScore();
+
+// ============================================================
+// INTERACTIVE KPI DRAWERS
+// ============================================================
+function buildKpiDrawers() {
+  // Win rate breakdown
+  let h = '<table><tr><th>Test</th><th>Control</th><th>Variant</th><th>Gap</th></tr>';
+  tests.forEach(t => {
+    const gap = (t.convRate.variant - t.convRate.control).toFixed(2);
+    h += `<tr><td>${t.name}</td><td>${t.convRate.control}%</td><td>${t.convRate.variant}%</td><td style="color:var(--negative)">${gap}%</td></tr>`;
+  });
+  h += '</table>';
+  document.getElementById('kpi-wins').innerHTML = h;
+
+  // Control conv breakdown
+  h = '<table><tr><th>Test</th><th>Conv Rate</th><th>ATC Rate</th><th>AOV</th></tr>';
+  tests.forEach(t => {
+    h += `<tr><td>${t.name}</td><td>${t.convRate.control}%</td><td>${t.session?.control || '-'}s</td><td>$${t.aov.control.toFixed(2)}</td></tr>`;
+  });
+  h += '</table>';
+  document.getElementById('kpi-ctrl-conv').innerHTML = h;
+
+  // Variant conv breakdown
+  h = '<table><tr><th>Test</th><th>Conv Rate</th><th>RPV</th><th>AOV</th></tr>';
+  tests.forEach(t => {
+    h += `<tr><td>${t.name}</td><td>${t.convRate.variant}%</td><td>$${t.rpv.variant.toFixed(2)}</td><td>$${t.aov.variant.toFixed(2)}</td></tr>`;
+  });
+  h += '</table>';
+  document.getElementById('kpi-var-conv').innerHTML = h;
+
+  // Visitors breakdown
+  h = '<table><tr><th>Test</th><th>Control</th><th>Variant</th><th>Total</th></tr>';
+  tests.forEach(t => {
+    const total = t.visitors.control + t.visitors.variant;
+    h += `<tr><td>${t.name}</td><td>${t.visitors.control}</td><td>${t.visitors.variant}</td><td><strong>${total.toLocaleString()}</strong></td></tr>`;
+  });
+  h += '</table>';
+  document.getElementById('kpi-visitors').innerHTML = h;
+
+  // Sub rate breakdown
+  h = '<table><tr><th>Test</th><th>Control Sub%</th><th>Variant Sub%</th><th>OTP Shift</th></tr>';
+  tests.forEach(t => {
+    const cs = Math.round(t.sub.control / t.orders.control * 100);
+    const vs = t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 100;
+    const shift = vs - cs;
+    h += `<tr><td>${t.name}</td><td>${cs}%</td><td>${vs}%</td><td style="color:${shift >= 0 ? 'var(--positive)' : 'var(--negative)'}">${shift > 0 ? '+' : ''}${shift}%</td></tr>`;
+  });
+  h += '</table>';
+  document.getElementById('kpi-sub-rate').innerHTML = h;
+}
+buildKpiDrawers();
+
+// ============================================================
+// DATA EXPLORER
+// ============================================================
+function buildDataExplorer() {
+  // Full test table
+  let h = '<thead><tr><th>Test</th><th>Ver</th><th>Date</th><th>Ctrl Conv</th><th>Var Conv</th><th>Delta</th><th>Ctrl Sub%</th><th>Var Sub%</th><th>Ctrl AOV</th><th>Var AOV</th><th>Ctrl RPV</th><th>Var RPV</th><th>Visitors</th></tr></thead><tbody>';
+  tests.forEach(t => {
+    const cs = Math.round(t.sub.control / t.orders.control * 100);
+    const vs = t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 100;
+    const delta = (t.convRate.variant - t.convRate.control).toFixed(2);
+    const total = t.visitors.control + t.visitors.variant;
+    h += `<tr>
+      <td><strong>${t.name}</strong></td>
+      <td><span class="tag ${t.version === 'V1' ? 'tag-v1' : 'tag-v2'}">${t.version}</span></td>
+      <td>${t.date}</td>
+      <td>${t.convRate.control}%</td>
+      <td>${t.convRate.variant}%</td>
+      <td class="negative">${delta}%</td>
+      <td>${cs}%</td><td>${vs}%</td>
+      <td>$${t.aov.control.toFixed(2)}</td><td>$${t.aov.variant.toFixed(2)}</td>
+      <td>$${t.rpv.control.toFixed(2)}</td><td>$${t.rpv.variant.toFixed(2)}</td>
+      <td>${total.toLocaleString()}</td>
+    </tr>`;
+  });
+  h += '</tbody>';
+  document.getElementById('explorerTestTable').innerHTML = h;
+
+  // Principles
+  const principles = [
+    { text: "Horizontal card layout outperforms vertical stacked cards", evidence: "All 7 variants used vertical and all lost", confidence: "proven", cat: "layout" },
+    { text: "Checkbox subscription toggle with pre-selection outperforms all alternatives", evidence: "Side-by-side: -2.2% conv. Separate card: -1.4%. No toggle: -1.7%", confidence: "proven", cat: "toggle" },
+    { text: "OTP should exist but not be prominent", evidence: "Removing OTP hurts conversion; making it visible hurts subscription rate", confidence: "proven", cat: "toggle" },
+    { text: "Pack-based naming beats time-based and BOGO naming", evidence: "Time-based: -0.5% conv. BOGO: -1.7% conv, eliminates OTP entirely", confidence: "proven", cat: "naming" },
+    { text: "3 options outperform 2 options", evidence: "2-option variants averaged -0.5% conv vs 3-option control", confidence: "likely", cat: "layout" },
+    { text: "Subscription entry price sweet spot is $34-40", evidence: "Control $34.99 wins. Sub-$30 and $40+ both underperform", confidence: "proven", cat: "pricing" },
+    { text: "OTP-to-subscription gap should be 14-15%", evidence: "Control maintains 14-15% gap across all packs", confidence: "likely", cat: "pricing" },
+    { text: "Product images on cards have no measurable impact", evidence: "Tested in Resilia V1 and Ryze V2 - zero conversion lift", confidence: "proven", cat: "layout" },
+    { text: "33.2% of cancellations are accidental subscriptions", evidence: "12,191 subscribers lost. Checkout UX fix = highest ROI opportunity", confidence: "proven", cat: "general" },
+  ];
+  h = '';
+  principles.forEach(p => {
+    const bcls = p.confidence === 'proven' ? 'badge-proven' : p.confidence === 'likely' ? 'badge-likely' : 'badge-hypothesis';
+    h += `<div class="principle-row">
+      <div class="principle-text"><span class="principle-badge ${bcls}">${p.confidence}</span> <span class="principle-badge" style="background:var(--yellow-50);color:var(--brown-800);">${p.cat}</span> ${p.text}</div>
+      <div class="principle-evidence">${p.evidence}</div>
+    </div>`;
+  });
+  document.getElementById('principlesList').innerHTML = h;
+
+  // Scoring weights
+  const weights = {
+    layout: { horizontal: 0, vertical: -1.8 },
+    toggle_type: { checkbox: 0, side_by_side: -2.2, none: -1.7, separate_card: -1.4 },
+    otp_visibility: { behind_toggle: 0, separate_card: -1.4, equal_weight: -2.0, not_available: -1.0 },
+    naming: { pack_based: 0, time_based: -0.5, creative: -0.4, bogo: -1.7 },
+    num_options: { '3': 0, '2': -0.5 },
+    pricing_display: { standard: 0, rounded: -0.1 },
+    savings_display: { none: 0, dollar: -0.3, percent: -0.3 },
+    product_images: { 'false': 0, 'true': 0 },
+    cta_copy: { add_to_cart: 0, buy_now: -0.1, get_started: -0.1 },
+  };
+  h = '<table class="data-table"><thead><tr><th>Element</th><th>Value</th><th>Conv Impact</th><th>Visual</th></tr></thead><tbody>';
+  for (const [element, values] of Object.entries(weights)) {
+    for (const [value, impact] of Object.entries(values)) {
+      const color = impact === 0 ? 'var(--positive)' : impact > -1 ? 'var(--yellow-500)' : 'var(--negative)';
+      const width = Math.max(4, Math.abs(impact) * 30);
+      h += `<tr>
+        <td><strong>${element}</strong></td>
+        <td>${value}</td>
+        <td style="color:${color};font-weight:700;">${impact === 0 ? 'BASELINE' : impact.toFixed(1) + '%'}</td>
+        <td>${impact === 0 ? '<span class="weight-bar" style="width:40px;background:var(--positive);"></span>' : '<span class="weight-bar" style="width:' + width + 'px;background:' + color + ';"></span>'}</td>
+      </tr>`;
+    }
+  }
+  h += '</tbody></table>';
+  document.getElementById('weightsList').innerHTML = h;
+
+  // Design elements per test
+  const designs = [
+    { test: 'Control', layout: 'horizontal', toggle: 'checkbox', otp: 'behind_toggle', naming: 'pack_based', options: 3, cta: 'add_to_cart' },
+    { test: 'Resilia V1', layout: 'vertical', toggle: 'checkbox', otp: 'behind_toggle', naming: 'bogo', options: 3, cta: 'add_to_cart' },
+    { test: 'Ankhway V1', layout: 'vertical', toggle: 'separate_card', otp: 'separate_card', naming: 'time_based', options: 2, cta: 'buy_now' },
+    { test: 'Ryze V1', layout: 'vertical', toggle: 'none', otp: 'not_available', naming: 'creative', options: 3, cta: 'get_started' },
+    { test: 'Omre V1', layout: 'vertical', toggle: 'side_by_side', otp: 'equal_weight', naming: 'time_based', options: 2, cta: 'get_started' },
+    { test: 'Ankhway V2', layout: 'vertical', toggle: 'separate_card', otp: 'separate_card', naming: 'time_based', options: 2, cta: 'buy_now' },
+    { test: 'Ryze V2', layout: 'vertical', toggle: 'none', otp: 'not_available', naming: 'creative', options: 3, cta: 'get_started' },
+    { test: 'Omre V2', layout: 'vertical', toggle: 'side_by_side', otp: 'equal_weight', naming: 'time_based', options: 2, cta: 'add_to_cart' },
+  ];
+  h = '<table class="data-table"><thead><tr><th>Test</th><th>Layout</th><th>Toggle</th><th>OTP</th><th>Naming</th><th>Options</th><th>CTA</th></tr></thead><tbody>';
+  designs.forEach(d => {
+    const isCtrl = d.test === 'Control';
+    h += `<tr${isCtrl ? ' style="background:var(--positive-bg)"' : ''}>
+      <td><strong>${d.test}</strong></td>
+      <td>${d.layout}</td><td>${d.toggle}</td><td>${d.otp}</td>
+      <td>${d.naming}</td><td>${d.options}</td><td>${d.cta}</td>
+    </tr>`;
+  });
+  h += '</tbody></table>';
+  document.getElementById('designList').innerHTML = h;
+
+  // Learnings
+  const allLearnings = [];
+  const learningData = {
+    'Resilia V1': ["BOGO naming completely eliminated OTP orders (7 -> 0)","Despite 100% sub rate, overall conversion dropped -1.73%","'Free' framing created perceived commitment that deterred purchases","Product images on cards did not improve conversion"],
+    'Ankhway V1': ["Making OTP a visible card increased OTP (6->15), halved subscriptions (49->24)","Vertical stacking creates more visual weight for OTP","Conversion dropped -2.16%","OTP as visible card makes it a 'safer' choice for commitment-averse"],
+    'Ryze V1': ["Removing OTP eliminated one-time purchases (21->1)","Subscription orders stayed similar (79 vs 81)","Forced subscription deterred some buyers","Session duration reduced -28.8%"],
+    'Omre V1': ["Side-by-side toggle destroyed sub rate (79.6%->54.3%)","OTP orders nearly doubled (23->37)","Higher AOV ($63.24) but lower conversion","Dynamic pricing showing OTP clearly pushed customers to 'safer' OTP"],
+    'Ankhway V2': ["V2 outperformed V1 significantly (4.82%->7.16%)","Rounded pricing + B2G1 improved sub ratio (62%->80%)","Closest to control performance (1.07% gap)","Session duration dropped 32%"],
+    'Ryze V2': ["Adding product images did NOT improve conversion","Sub-only model eliminates OTP (14->0)","97.75% probability control wins","Problem is sub-only model, not visual design"],
+    'Omre V2': ["Rounded pricing negligible impact (5.41%->5.47%)","Side-by-side toggle still cannibalized subs (51->30)","Sub ratio improved vs V1 (68% vs 54%) but worse than control (86%)","Side-by-side toggle fundamentally flawed for Nuora"],
+  };
+  h = '';
+  for (const [test, learnings] of Object.entries(learningData)) {
+    h += `<div style="margin-bottom:14px;"><strong style="color:var(--brown-950);font-size:13px;">${test}</strong>`;
+    learnings.forEach(l => {
+      allLearnings.push(l);
+      h += `<div style="font-size:12px;color:var(--brown-800);padding:3px 0 3px 12px;border-left:2px solid var(--border-solid);">${l}</div>`;
+    });
+    h += '</div>';
+  }
+  document.getElementById('learningsList').innerHTML = h;
+  document.getElementById('learningsCount').textContent = allLearnings.length + ' learnings';
+
+  // Pricing
+  h = '<table class="data-table"><thead><tr><th>Test</th><th>Type</th><th>Pack</th><th>Price</th><th>Compare</th><th>Discount</th></tr></thead><tbody>';
+  const pricingData = [
+    { test:'Control', type:'sub', pack:'1 Pack', price:34.99, compare:57.99 },
+    { test:'Control', type:'sub', pack:'2 Packs', price:49.99, compare:115.98 },
+    { test:'Control', type:'sub', pack:'3 Packs', price:58.99, compare:173.97 },
+    { test:'Control', type:'otp', pack:'1 Pack', price:40.99, compare:57.99 },
+    { test:'Control', type:'otp', pack:'2 Packs', price:57.99, compare:115.98 },
+    { test:'Control', type:'otp', pack:'3 Packs', price:68.99, compare:173.97 },
+    { test:'Resilia V1', type:'sub', pack:'Buy One', price:29.99, compare:59.99, disc:'50%' },
+    { test:'Resilia V1', type:'sub', pack:'Buy 2 Get 1', price:59.99, compare:179.97, disc:'67%' },
+    { test:'Ankhway V1', type:'sub', pack:'30-day', price:37.99, compare:47.49, disc:'20%' },
+    { test:'Ankhway V1', type:'sub', pack:'90-day', price:75.99, compare:79.99 },
+    { test:'Ryze V1', type:'sub', pack:'Single', price:34.19, compare:63.30, disc:'46%' },
+    { test:'Ryze V1', type:'sub', pack:'Starter Kit', price:44.99, compare:80.34, disc:'44%' },
+    { test:'Ryze V1', type:'sub', pack:'Ritual Set', price:53.09, compare:100.17, disc:'47%' },
+    { test:'Omre V1', type:'sub', pack:'1-month', price:39.99, compare:52.30, disc:'30%' },
+    { test:'Omre V1', type:'sub', pack:'3-month', price:79.99, compare:139.45, disc:'40%' },
+    { test:'Ankhway V2', type:'sub', pack:'30-day', price:40.00, compare:50.00, disc:'20%' },
+    { test:'Ankhway V2', type:'sub', pack:'90-day', price:99.99, compare:150.00 },
+    { test:'Omre V2', type:'sub', pack:'1-month', price:40.00, compare:60.00, disc:'33%' },
+    { test:'Omre V2', type:'sub', pack:'3-month', price:100.00, compare:180.00, disc:'44%' },
+  ];
+  pricingData.forEach(p => {
+    const isCtrl = p.test === 'Control';
+    h += `<tr${isCtrl ? ' style="background:var(--positive-bg)"' : ''}>
+      <td>${p.test}</td><td>${p.type}</td><td>${p.pack}</td>
+      <td><strong>$${p.price.toFixed(2)}</strong></td>
+      <td>${p.compare ? '$' + p.compare.toFixed(2) : '-'}</td>
+      <td>${p.disc || '-'}</td>
+    </tr>`;
+  });
+  h += '</tbody></table>';
+  document.getElementById('pricingList').innerHTML = h;
+}
+buildDataExplorer();
 </script>
 </body>
 </html>
