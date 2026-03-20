@@ -634,56 +634,39 @@
   .kpi-card {
     cursor: pointer;
     transition: border-color 0.15s ease;
-    position: relative;
   }
-  .kpi-card:hover {
-    border-color: var(--yellow-400);
-  }
-  .kpi-card::after {
-    content: '+';
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--yellow-500);
-    transition: transform 0.2s ease;
-  }
-  .kpi-card.expanded::after {
-    content: '-';
-  }
-  .kpi-drawer {
+  .kpi-card:hover { border-color: var(--yellow-400); }
+  .kpi-card.active-kpi { border-color: var(--yellow-400); background: var(--yellow-50); }
+  .kpi-detail-panel {
     display: none;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border-solid);
-    font-size: 12px;
-    color: var(--brown-800);
-    line-height: 1.6;
+    background: var(--white);
+    border: 1px solid var(--border-solid);
+    border-radius: 1px;
+    padding: 20px;
+    margin-bottom: 24px;
+    overflow-x: auto;
   }
-  .kpi-card.expanded .kpi-drawer {
-    display: block;
-  }
-  .kpi-drawer table {
+  .kpi-detail-panel.visible { display: block; }
+  .kpi-detail-panel table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
-    margin-top: 6px;
+    font-size: 12px;
   }
-  .kpi-drawer table th {
+  .kpi-detail-panel table th {
     text-align: left;
     font-weight: 700;
     color: var(--brown-950);
-    padding: 4px 6px;
-    border-bottom: 1px solid var(--border-solid);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--brown-950);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
-  .kpi-drawer table td {
-    padding: 4px 6px;
-    border-bottom: 1px solid rgba(113,59,18,0.05);
+  .kpi-detail-panel table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border-solid);
   }
+  .kpi-detail-panel table tr:hover td { background: var(--yellow-50); }
 
   /* ==================== DATA EXPLORER ==================== */
   .data-card {
@@ -812,37 +795,33 @@
 <div id="tab-overview" class="tab-content active">
 
   <div class="kpi-grid">
-    <div class="kpi-card highlight" onclick="this.classList.toggle('expanded')">
+    <div class="kpi-card highlight" onclick="toggleKpi('wins')">
       <div class="kpi-label">Control Win Rate</div>
       <div class="kpi-value">7/7</div>
       <div class="kpi-sub">Control has won every single test</div>
-      <div class="kpi-drawer" id="kpi-wins"></div>
     </div>
-    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
+    <div class="kpi-card" onclick="toggleKpi('ctrl-conv')">
       <div class="kpi-label">Avg Control Conversion</div>
       <div class="kpi-value">7.60%</div>
       <div class="kpi-sub">Range: 5.94% - 8.99%</div>
-      <div class="kpi-drawer" id="kpi-ctrl-conv"></div>
     </div>
-    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
+    <div class="kpi-card" onclick="toggleKpi('var-conv')">
       <div class="kpi-label">Avg Variant Conversion</div>
       <div class="kpi-value">5.61%</div>
       <div class="kpi-sub">-1.99% avg gap from control</div>
-      <div class="kpi-drawer" id="kpi-var-conv"></div>
     </div>
-    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
+    <div class="kpi-card" onclick="toggleKpi('visitors')">
       <div class="kpi-label">Total Visitors Tested</div>
       <div class="kpi-value">15.3K</div>
       <div class="kpi-sub">Across 7 A/B tests (Jan 2026)</div>
-      <div class="kpi-drawer" id="kpi-visitors"></div>
     </div>
-    <div class="kpi-card" onclick="this.classList.toggle('expanded')">
+    <div class="kpi-card" onclick="toggleKpi('sub-rate')">
       <div class="kpi-label">Control Subscription Rate</div>
       <div class="kpi-value">81%</div>
       <div class="kpi-sub">Avg across all control groups</div>
-      <div class="kpi-drawer" id="kpi-sub-rate"></div>
     </div>
   </div>
+  <div class="kpi-detail-panel" id="kpiPanel"></div>
 
   <!-- Conversion Chart -->
   <div class="section">
@@ -1430,55 +1409,76 @@ function recalcScore(){
 recalcScore();
 
 // ============================================================
-// INTERACTIVE KPI DRAWERS
+// INTERACTIVE KPI - FULL WIDTH PANEL BELOW GRID
 // ============================================================
-function buildKpiDrawers() {
-  // Win rate breakdown
-  let h = '<table><tr><th>Test</th><th>Control</th><th>Variant</th><th>Gap</th></tr>';
+let activeKpi = null;
+const kpiContent = {};
+
+// Pre-build all KPI detail tables
+function initKpiPanels() {
+  let h;
+
+  // Wins
+  h = '<table><thead><tr><th>Test</th><th>Date</th><th>Control Conv</th><th>Variant Conv</th><th>Gap</th><th>Control Orders</th><th>Variant Orders</th><th>Result</th></tr></thead><tbody>';
   tests.forEach(t => {
     const gap = (t.convRate.variant - t.convRate.control).toFixed(2);
-    h += `<tr><td>${t.name}</td><td>${t.convRate.control}%</td><td>${t.convRate.variant}%</td><td style="color:var(--negative)">${gap}%</td></tr>`;
+    h += `<tr><td><strong>${t.name}</strong></td><td>${t.date}</td><td>${t.convRate.control}%</td><td>${t.convRate.variant}%</td><td style="color:var(--negative);font-weight:700">${gap}%</td><td>${t.orders.control}</td><td>${t.orders.variant}</td><td><span class="tag tag-lose">CONTROL</span></td></tr>`;
   });
-  h += '</table>';
-  document.getElementById('kpi-wins').innerHTML = h;
+  kpiContent['wins'] = h + '</tbody></table>';
 
-  // Control conv breakdown
-  h = '<table><tr><th>Test</th><th>Conv Rate</th><th>ATC Rate</th><th>AOV</th></tr>';
+  // Control conv
+  h = '<table><thead><tr><th>Test</th><th>Conv Rate</th><th>Session (sec)</th><th>AOV</th><th>RPV</th><th>Orders</th><th>Revenue</th></tr></thead><tbody>';
   tests.forEach(t => {
-    h += `<tr><td>${t.name}</td><td>${t.convRate.control}%</td><td>${t.session?.control || '-'}s</td><td>$${t.aov.control.toFixed(2)}</td></tr>`;
+    h += `<tr><td><strong>${t.name}</strong></td><td>${t.convRate.control}%</td><td>${t.session.control}s</td><td>$${t.aov.control.toFixed(2)}</td><td>$${t.rpv.control.toFixed(2)}</td><td>${t.orders.control}</td><td>$${t.revenue.control.toLocaleString()}</td></tr>`;
   });
-  h += '</table>';
-  document.getElementById('kpi-ctrl-conv').innerHTML = h;
+  kpiContent['ctrl-conv'] = h + '</tbody></table>';
 
-  // Variant conv breakdown
-  h = '<table><tr><th>Test</th><th>Conv Rate</th><th>RPV</th><th>AOV</th></tr>';
+  // Variant conv
+  h = '<table><thead><tr><th>Test</th><th>Conv Rate</th><th>Session (sec)</th><th>AOV</th><th>RPV</th><th>Orders</th><th>Revenue</th></tr></thead><tbody>';
   tests.forEach(t => {
-    h += `<tr><td>${t.name}</td><td>${t.convRate.variant}%</td><td>$${t.rpv.variant.toFixed(2)}</td><td>$${t.aov.variant.toFixed(2)}</td></tr>`;
+    h += `<tr><td><strong>${t.name}</strong></td><td>${t.convRate.variant}%</td><td>${t.session.variant}s</td><td>$${t.aov.variant.toFixed(2)}</td><td>$${t.rpv.variant.toFixed(2)}</td><td>${t.orders.variant}</td><td>$${t.revenue.variant.toLocaleString()}</td></tr>`;
   });
-  h += '</table>';
-  document.getElementById('kpi-var-conv').innerHTML = h;
+  kpiContent['var-conv'] = h + '</tbody></table>';
 
-  // Visitors breakdown
-  h = '<table><tr><th>Test</th><th>Control</th><th>Variant</th><th>Total</th></tr>';
+  // Visitors
+  h = '<table><thead><tr><th>Test</th><th>Control</th><th>Variant</th><th>Total</th><th>Duration (hrs)</th></tr></thead><tbody>';
   tests.forEach(t => {
     const total = t.visitors.control + t.visitors.variant;
-    h += `<tr><td>${t.name}</td><td>${t.visitors.control}</td><td>${t.visitors.variant}</td><td><strong>${total.toLocaleString()}</strong></td></tr>`;
+    h += `<tr><td><strong>${t.name}</strong></td><td>${t.visitors.control.toLocaleString()}</td><td>${t.visitors.variant.toLocaleString()}</td><td><strong>${total.toLocaleString()}</strong></td><td>${t.date}</td></tr>`;
   });
-  h += '</table>';
-  document.getElementById('kpi-visitors').innerHTML = h;
+  kpiContent['visitors'] = h + '</tbody></table>';
 
-  // Sub rate breakdown
-  h = '<table><tr><th>Test</th><th>Control Sub%</th><th>Variant Sub%</th><th>OTP Shift</th></tr>';
+  // Sub rate
+  h = '<table><thead><tr><th>Test</th><th>Ctrl Sub Orders</th><th>Ctrl OTP</th><th>Ctrl Sub%</th><th>Var Sub Orders</th><th>Var OTP</th><th>Var Sub%</th><th>Shift</th></tr></thead><tbody>';
   tests.forEach(t => {
     const cs = Math.round(t.sub.control / t.orders.control * 100);
     const vs = t.orders.variant > 0 ? Math.round(t.sub.variant / t.orders.variant * 100) : 100;
     const shift = vs - cs;
-    h += `<tr><td>${t.name}</td><td>${cs}%</td><td>${vs}%</td><td style="color:${shift >= 0 ? 'var(--positive)' : 'var(--negative)'}">${shift > 0 ? '+' : ''}${shift}%</td></tr>`;
+    const sc = shift >= 0 ? 'var(--positive)' : 'var(--negative)';
+    h += `<tr><td><strong>${t.name}</strong></td><td>${t.sub.control}</td><td>${t.otp.control}</td><td>${cs}%</td><td>${t.sub.variant}</td><td>${t.otp.variant}</td><td>${vs}%</td><td style="color:${sc};font-weight:700">${shift > 0 ? '+' : ''}${shift}%</td></tr>`;
   });
-  h += '</table>';
-  document.getElementById('kpi-sub-rate').innerHTML = h;
+  kpiContent['sub-rate'] = h + '</tbody></table>';
 }
-buildKpiDrawers();
+
+function toggleKpi(key) {
+  const panel = document.getElementById('kpiPanel');
+  const cards = document.querySelectorAll('.kpi-card');
+
+  if (activeKpi === key) {
+    panel.classList.remove('visible');
+    cards.forEach(c => c.classList.remove('active-kpi'));
+    activeKpi = null;
+    return;
+  }
+
+  panel.innerHTML = kpiContent[key];
+  panel.classList.add('visible');
+  cards.forEach(c => c.classList.remove('active-kpi'));
+  event.currentTarget.classList.add('active-kpi');
+  activeKpi = key;
+}
+
+initKpiPanels();
 
 // ============================================================
 // DATA EXPLORER
