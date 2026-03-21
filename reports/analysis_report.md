@@ -1,6 +1,6 @@
 # Nuora Offer Intelligence Report
 
-**Generated:** 2026-03-21 14:13
+**Generated:** 2026-03-21 08:44
 **Data Source:** 8 A/B tests, 26,723 visitors, Jan 2026
 **Product:** Nuora Vaginal Probiotic Gummies
 
