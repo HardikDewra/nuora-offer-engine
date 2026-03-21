@@ -1,0 +1,120 @@
+{
+  "name": "Gummies Ritual V1",
+  "style": "Ritual",
+  "version": "V1",
+  "url": "https://mynuora.com/products/feminine-balance-gummies-1",
+  "test_date": "2026-03-20",
+  "duration_hours": 19,
+  "result": "control_wins",
+  "probability_to_win": 0.01,
+  "product": "vaginal_probiotic_gummies",
+  "notes": "First test tracked in March 2026 engine. Control won by 2.11%. AOV higher but ATC rate significantly lower.",
+  "design": {
+    "layout": "horizontal",
+    "toggle_type": "separate_card",
+    "otp_visibility": "separate_card",
+    "naming": "pack_based",
+    "num_options": 2,
+    "pricing_display": "standard",
+    "savings_display": "percent",
+    "product_images": true,
+    "cta_copy": "add_to_cart",
+    "bundle_names": ["30 Gummies", "60 Gummies"],
+    "badges": ["Value Pack - Save 31%"],
+    "per_serving_shown": true,
+    "compare_at_anchor": 100.00,
+    "dynamic_cta": true,
+    "cta_shows_price": true,
+    "subscription_info_location": "inside_selected_card",
+    "subscription_benefits_expanded": true,
+    "copy_headline": "Built to be a ritual - not a one-time thing",
+    "guarantee": "60 Day Guarantee",
+    "free_shipping_badge": true,
+    "default_selection": "60_gummies_subscription"
+  },
+  "pricing": {
+    "subscription": {
+      "30_gummies": {
+        "price": 36.24,
+        "compare": 50.00,
+        "discount_pct": 27,
+        "per_serving": 1.21
+      },
+      "60_gummies": {
+        "price": 69.12,
+        "compare": 100.00,
+        "discount_pct": 31,
+        "per_serving": 1.15
+      }
+    },
+    "one_time": {
+      "30_gummies": {
+        "price": 43.20,
+        "compare": 50.00
+      },
+      "60_gummies": {
+        "price": 86.40,
+        "compare": 100.00
+      }
+    }
+  },
+  "metrics": {
+    "control": {
+      "visitors": 5745,
+      "revenue": 18591.48,
+      "revenue_per_visitor": 3.24,
+      "conversion_rate": 5.88,
+      "orders": 338,
+      "aov": 54.20,
+      "profit": 18006.48,
+      "profit_per_visitor": 3.13,
+      "shipping_revenue": 499.95,
+      "add_to_cart_rate": 10.2,
+      "reached_checkout_rate": 7.6,
+      "checkout_completed_rate": 5.88,
+      "session_duration_sec": 35,
+      "otp_orders": 136,
+      "subscription_orders": 202,
+      "subscription_rate": 59.8
+    },
+    "variant": {
+      "visitors": 5643,
+      "revenue": 13133.21,
+      "revenue_per_visitor": 2.33,
+      "conversion_rate": 3.77,
+      "orders": 213,
+      "aov": 61.08,
+      "profit": 12566.21,
+      "profit_per_visitor": 2.23,
+      "shipping_revenue": 470.25,
+      "add_to_cart_rate": 6.1,
+      "reached_checkout_rate": 4.1,
+      "checkout_completed_rate": 3.77,
+      "session_duration_sec": 30,
+      "otp_orders": 88,
+      "subscription_orders": 125,
+      "subscription_rate": 58.7
+    }
+  },
+  "traffic_sources": {
+    "facebook": 7068,
+    "instagram": 2635,
+    "direct": 1123,
+    "google": 767,
+    "unknown": 94,
+    "youtube": 16,
+    "other": 25
+  },
+  "key_learnings": [
+    "AOV lifted to $61.08 (vs $54.20 control) - pricing structure achieves higher cart value",
+    "CRITICAL: Add-to-cart rate dropped from 10.2% to 6.1% - a 40% relative decrease. Offer is not appealing enough at first glance.",
+    "Conversion rate dropped from 5.88% to 3.77% - a 36% relative decrease, worse than AOV gain",
+    "Sub/OTP radio buttons with expanded subscription card gives OTP too much equal visibility",
+    "Only 2 pack options (30/60 gummies) - missing the middle option that creates decoy effect",
+    "$100 compare-at price looks inflated and not credible vs control's $57.99 anchor",
+    "Per-serving price ($1.44, $1.15) makes product feel expensive - control doesn't show this",
+    "Session duration dropped 14% (35s -> 30s) - users deciding faster but not converting",
+    "Copy 'Built to be a ritual - not a one-time thing' may be too pushy against OTP customers",
+    "Design alignment issue: 60 gummies card content sits lower due to 'Value Pack' badge pushing it down"
+  ]
+}
