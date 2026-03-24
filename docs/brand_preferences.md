@@ -10,7 +10,8 @@ This documents the design preferences for all Nuora CRO assets. These apply to a
 - **No glow effects.** No glow, no radiance, no luminous effects of any kind.
 - **No liquid glass.** Does NOT like the Apple iOS 26 / macOS Tahoe "liquid glass" look.
 - **Frosty glass is OK.** Subtle frosted glass (backdrop-filter blur with semi-transparent white) is acceptable and preferred for card elements.
-- **1px border-radius maximum.** No rounded corners beyond 1px. Applies to cards, buttons, inputs, tags, charts, badges - everything.
+- **4px border-radius.** Consistent 4px corner radius on all elements - cards, buttons, inputs, tags, charts, badges.
+- **Hover states go LIGHTER, not darker.** Think of it as light coming through, the element coming closer to you. Use `rgba(255, 255, 255, 0.6)` or `rgba(255, 255, 255, 0.8)` on hover. Never darken on hover.
 - **Minimal borders.** 1px solid borders only. Use subtle colors like `rgba(113, 59, 18, 0.08)` for glass borders.
 
 ### Typography

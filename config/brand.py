@@ -14,7 +14,7 @@ BRAND = {
 # Design preferences (Nikita)
 DESIGN_PREFERENCES = {
     "mode": "light_only",           # NO dark mode anywhere
-    "border_radius": "1px",         # Maximum 1px on all elements
+    "border_radius": "4px",         # 4px corner radius on all elements
     "shadows": False,               # NO box-shadow, text-shadow, or glow
     "glow_effects": False,          # No glow or radiance
     "liquid_glass": False,          # Does NOT like iOS 26 liquid glass
