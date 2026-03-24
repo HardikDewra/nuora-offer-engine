@@ -62,7 +62,8 @@ Used for medical-branded version of gummies (same SKU, different avatar).
 - Box shadows (`box-shadow`)
 - Text shadows (`text-shadow`)
 - Glow effects
-- Border-radius greater than 1px
+- Border-radius other than 4px (keep it consistent)
+- Hover states that darken elements (always go lighter on hover)
 - Dark backgrounds for headers or sections
 - Neon or saturated colors outside the approved palette
 
